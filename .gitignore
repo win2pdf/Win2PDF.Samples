@@ -351,3 +351,4 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+plug-in/PDFImageOnlyFlatten/Output/Win2PDF-Image-Only-Flattener-Plug-In.exe
