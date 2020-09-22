@@ -1,3 +1,3 @@
 # Win2PDF Plug-Ins
 
-[PDF Image Only Flattener](/PDFImageOnlyFlatten)
+[PDF Image Only Flattener](/plug-in/PDFImageOnlyFlatten)
