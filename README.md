@@ -1,5 +1,5 @@
 # Win2PDF.Samples
  
- [Plug-Ins](/plug-ins)
+ [Plug-Ins](/plug-in)
  
 Please contact support@win2pdf.com with questions
