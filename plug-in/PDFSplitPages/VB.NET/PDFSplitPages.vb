@@ -6,8 +6,7 @@ Imports System.Diagnostics
 
 
 
-Module PDFDeletePages
-
+Module PDFSplitPages
 
     Sub Main(ByVal args() As String)
         Try
@@ -26,8 +25,9 @@ Module PDFDeletePages
                     Dim truncated_file As String = args(0) + ".pdf"
 
                     'enclose the file names in quotes in case they contain spaces
-                    'delete pages 2-9999. command line documented at: https://www.win2pdf.com/doc/command-line-delete-pages-pdf.html
-                    Dim arguments As String = String.Format("deletepages ""{0}"" 2 9999 ""{1}""", args(0), truncated_file)
+                    'splitpagesdelete command line documented at: https://www.win2pdf.com/doc/command-line-split-pages-pdf.html
+                    'change the 3rd parameter to specify a different page increment for the split
+                    Dim arguments As String = String.Format("splitpagesdelete ""{0}"" ""{1}"" 1 0", args(0), Path.GetDirectoryName(args(0)))
 
                     Dim startInfo As New ProcessStartInfo(win2pdfcmdline)
                     With startInfo
@@ -35,18 +35,12 @@ Module PDFDeletePages
                         .WindowStyle = ProcessWindowStyle.Hidden
                     End With
 
-                    'execute the deletepages command
+                    'execute the splitpages command line to split the PDF into individual files
                     newProc = Diagnostics.Process.Start(startInfo)
                     newProc.WaitForExit()
                     If newProc.HasExited Then
                         If newProc.ExitCode <> 0 Then
                             MessageBox.Show(String.Format("Win2PDF command line failed, make sure Win2PDF is licensed: {0} {1}, error code {2}", win2pdfcmdline, arguments, newProc.ExitCode))
-                        Else
-                            'copy truncated PDF to original file name
-                            If File.Exists(args(0)) Then
-                                File.Delete(args(0))
-                            End If
-                            File.Move(truncated_file, args(0))
                         End If
                     End If
                 Else

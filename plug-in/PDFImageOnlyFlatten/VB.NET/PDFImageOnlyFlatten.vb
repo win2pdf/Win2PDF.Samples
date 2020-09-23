@@ -26,45 +26,51 @@ Module PDFImageOnlyFlatten
                         win2pdfcmdline += "\spool\drivers\w32x86\3\win2pdfd.exe"
                     End If
 
-                    'copy original PDF file to temporary name, and use original PDF file as destination
-                    If File.Exists(newfile) Then
-                        File.Delete(newfile)
-                    End If
-                    File.Move(args(0), newfile)
-
-                    'enclose the file names in quotes in case they contain spaces, 
-                    'use ".pdfc" as destination to force "PDF Image Only (color)"
-                    'change destination to ".pdfi" to force "PDF Image Only (monochrome)"
-                    'use "Win2Image" printer so the plug-in isn't called recursively
-                    Dim arguments As String = String.Format("printpdf ""{0}"" ""{1}"" ""{2}""", newfile, "Win2Image", args(0) + "c")
-
-                    Dim startInfo As New ProcessStartInfo(win2pdfcmdline)
-                    With startInfo
-                        .Arguments = arguments
-                        .WindowStyle = ProcessWindowStyle.Hidden
-                    End With
-
-                    'execute the printpdf command line to create an Image Only PDF
-                    newProc = Diagnostics.Process.Start(startInfo)
-                    newProc.WaitForExit()
-                    If newProc.HasExited Then
-                        'delete temp file
+                    If File.Exists(win2pdfcmdline) Then
+                        'copy original PDF file to temporary name, and use original PDF file as destination
                         If File.Exists(newfile) Then
                             File.Delete(newfile)
                         End If
+                        File.Move(args(0), newfile)
 
-                        If newProc.ExitCode <> 0 Then
-                            MessageBox.Show(String.Format("Win2PDF command line failed: {0} {1}, error code {2}", win2pdfcmdline, arguments, newProc.ExitCode))
+                        'enclose the file names in quotes in case they contain spaces, 
+                        'use ".pdfc" as destination to force "PDF Image Only (color)"
+                        'change destination to ".pdfi" to force "PDF Image Only (monochrome)"
+                        'use "Win2Image" printer so the plug-in isn't called recursively
+                        Dim arguments As String = String.Format("printpdf ""{0}"" ""{1}"" ""{2}""", newfile, "Win2Image", args(0) + "c")
+
+                        Dim startInfo As New ProcessStartInfo(win2pdfcmdline)
+                        With startInfo
+                            .Arguments = arguments
+                            .WindowStyle = ProcessWindowStyle.Hidden
+                        End With
+
+                        'execute the printpdf command line to create an Image Only PDF
+                        newProc = Diagnostics.Process.Start(startInfo)
+                        newProc.WaitForExit()
+                        If newProc.HasExited Then
+                            'delete temp file
+                            If File.Exists(newfile) Then
+                                File.Delete(newfile)
+                            End If
+
+                            If newProc.ExitCode <> 0 Then
+                                MessageBox.Show(String.Format("Win2PDF command line failed: {0} {1}, error code {2}", win2pdfcmdline, arguments, newProc.ExitCode))
+                            End If
                         End If
+                    Else
+                        MessageBox.Show(String.Format("Win2PDF is not installed.  Download Win2PDF at https://www.win2pdf.com/download/"))
                     End If
                 End If
             Else
                 MessageBox.Show("Invalid number of parameters")
             End If
         Catch ex As Exception
+            Dim exception_description = String.Format("Win2PDF plug-in exception {0}, stack {1}, targetsite {2}", ex.Message, ex.StackTrace, ex.TargetSite)
+            MessageBox.Show(exception_description)
             Using eventLog As EventLog = New EventLog("Application")
                 eventLog.Source = "Win2PDF"
-                eventLog.WriteEntry(String.Format("Win2PDF plug-in exception {0}, stack {1}, targetsite {2}", ex.Message, ex.StackTrace, ex.TargetSite), EventLogEntryType.Error, 101)
+                eventLog.WriteEntry(exception_description, EventLogEntryType.Error, 101)
             End Using
         End Try
     End Sub

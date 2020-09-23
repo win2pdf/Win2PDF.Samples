@@ -353,3 +353,5 @@ MigrationBackup/
 .ionide/
 plug-in/PDFImageOnlyFlatten/Output/Win2PDF-Image-Only-Flattener-Plug-In.exe
 plug-in/PDFDeletePages/Output/Win2PDF-Delete-Pages-Plug-In.exe
+plug-in/PDFSplitPages/Output/Win2PDF-Delete-Pages-Plug-In.exe
+plug-in/PDFSplitPages/Output/Win2PDF-Split-Pages-Plug-In.exe
