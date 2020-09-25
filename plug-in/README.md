@@ -4,7 +4,7 @@
 
 [PDF Split Pages](/plug-in/PDFSplitPages) - Automatically splits a multi-page PDF into separate one page PDFs
 
-[PDF Apply Multiple Watermarks](/plug-in/PDFApplyMultipleWatermarks) - Automatically apply different watermarks to separate sections of a PDF
+[PDF Apply Multiple Watermarks](/plug-in/PDFMultipleWatermarks) - Automatically apply different watermarks to separate sections of a PDF
 
 [PDF Image Only Flattener](/plug-in/PDFImageOnlyFlatten) - Automatically merge watermark layers into a single layer Image Only PDF
 
