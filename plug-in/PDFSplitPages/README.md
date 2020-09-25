@@ -2,4 +2,6 @@
 
 This sample shows how to create a Win2PDF plug-in to automatically split a newly created PDF into individual files.
 
-This plug-in uses the Win2PDF command line to [split pages](https://www.win2pdf.com/doc/command-line-split-pages-pdf.html) from the PDF, and requires a licensed version of Win2PDF.  Contact support@win2pdf.com for a time limited evaluation license.
+The Win2PDFSplitPages.iss [Inno Setup](https://jrsoftware.org/isinfo.php) script creates a setup program that can be used to install the plug-in.
+
+This plug-in uses the [Win2PDF command line](https://www.win2pdf.com/doc/win2pdf-desktop-command-line.html) to [split pages](https://www.win2pdf.com/doc/command-line-split-pages-pdf.html) from the PDF, and requires a licensed version of Win2PDF.  Contact support@win2pdf.com for a time limited evaluation license.

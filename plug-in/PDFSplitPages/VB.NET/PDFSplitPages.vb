@@ -22,8 +22,6 @@ Module PDFSplitPages
                 End If
 
                 If File.Exists(win2pdfcmdline) Then
-                    Dim truncated_file As String = args(0) + ".pdf"
-
                     'enclose the file names in quotes in case they contain spaces
                     'splitpagesdelete command line documented at: https://www.win2pdf.com/doc/command-line-split-pages-pdf.html
                     'change the 3rd parameter to specify a different page increment for the split
