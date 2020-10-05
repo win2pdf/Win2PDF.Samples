@@ -16,9 +16,13 @@ static class PDFSplitPages
 
                 // get the path to the Win2PDF command line executable
                 if (Environment.Is64BitOperatingSystem)
+                {
                     win2pdfcmdline += @"\spool\drivers\x64\3\win2pdfd.exe";
+                }
                 else
+                {
                     win2pdfcmdline += @"\spool\drivers\w32x86\3\win2pdfd.exe";
+                }
 
                 if (File.Exists(win2pdfcmdline))
                 {
@@ -40,14 +44,20 @@ static class PDFSplitPages
                     if (newProc.HasExited)
                     {
                         if (newProc.ExitCode != 0)
+                        {
                             MessageBox.Show(string.Format("Win2PDF command line failed, make sure Win2PDF is licensed: {0} {1}, error code {2}", win2pdfcmdline, arguments, newProc.ExitCode));
+                        }
                     }
                 }
                 else
+                {
                     MessageBox.Show(string.Format("Win2PDF is not installed.  Download Win2PDF at https://www.win2pdf.com/download/"));
+                }
             }
             else
+            {
                 MessageBox.Show("Invalid number of parameters");
+            }
         }
         catch (Exception ex)
         {

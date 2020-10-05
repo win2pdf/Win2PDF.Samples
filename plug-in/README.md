@@ -1,5 +1,7 @@
 # Win2PDF Plug-Ins
 
+[PDF Send To Outlook](/plug-in/PDFSendToOutlook) - Add a "Send To Outlook" option to Win2PDF File Save window to automatically attach a PDF to an Outlook email message
+
 [PDF Delete Pages](/plug-in/PDFDeletePages) - Automatically deletes extra pages from a newly created PDF
 
 [PDF Split Pages](/plug-in/PDFSplitPages) - Automatically splits a multi-page PDF into separate one page PDFs
@@ -10,4 +12,4 @@
 
 Plug-ins require that [Win2PDF](https://www.win2pdf.com) is installed.  An evaluation version of Win2PDF can be downloaded for free at https://www.win2pdf.com/download/ 
 
-Please contact support@win2pdf.com with questions or to request a time limited evaluation license.
+Please contact support@win2pdf.com with questions, plug-in feature requests, or to request a time limited evaluation license.
