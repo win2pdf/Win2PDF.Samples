@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Win2PDF Delete Pages Plug-In"
-#define MyAppVersion "1.0"
+#define MyAppVersion "1.01"
 #define MyAppPublisher "Dane Prairie Systems, LLC"
 #define MyAppURL "https://www.win2pdf.com"
 #define MyAppExeName "PDFDeletePages.exe"
@@ -42,3 +42,5 @@ Source: "VB.NET\bin\Release\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignorever
 ;use HKLM to install for all users
 ;use "SOFTWARE\Dane Prairie Systems\PrinterName" to install for a specific printer
 Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; ValueType:string; ValueName: "default post action"; ValueData: "{app}\{#MyAppExeName} ""%s"""; Flags: uninsdeletevalue
+;Allow user to turn "Delete Extra Pages" on or off in the Win2PDF File Save window
+Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; ValueType:string; ValueName: "post action checkbox label"; ValueData: "Delete Extra Pages"; Flags: uninsdeletevalue

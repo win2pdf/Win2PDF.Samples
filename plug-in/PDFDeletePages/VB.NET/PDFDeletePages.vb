@@ -40,7 +40,9 @@ Module PDFDeletePages
                     newProc.WaitForExit()
                     If newProc.HasExited Then
                         If newProc.ExitCode <> 0 Then
-                            MessageBox.Show(String.Format("Win2PDF command line failed, make sure Win2PDF is licensed: {0} {1}, error code {2}", win2pdfcmdline, arguments, newProc.ExitCode))
+                            'if there are no pages to delete, the deletepages command returns a failure code
+                            'ignore the error since we can't tell if it's a 1 page PDF
+                            'MessageBox.Show(String.Format("Win2PDF command line failed, make sure Win2PDF is licensed: {0} {1}, error code {2}", win2pdfcmdline, arguments, newProc.ExitCode))
                         Else
                             'copy truncated PDF to original file name
                             If File.Exists(args(0)) Then
