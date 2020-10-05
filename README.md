@@ -15,7 +15,7 @@
  
 Win2PDF supports a [developer interface](https://www.win2pdf.com/doc/registryoverview.html) and also supports a [command line interface](https://www.win2pdf.com/doc/win2pdf-desktop-command-line.html) for creating and manipulating PDF files.
 
-Win2PDF functionality can be extended through plug-ins, and this repository contains [sample plug-ins](/plug-in) written in .NET.  You can extend the features of Win2PDF by interfacing with external applications such as [Outlook](/plug-ins/PDFSendToOutlook), by using the [command line interface](https://www.win2pdf.com/doc/win2pdf-desktop-command-line.html) to perform additional PDF operations ([multiple watermarks](/plug-in/PDFMulitpleWatermarks), [flattening](plug-ins/PDFImageOnlyFlatten), [split pages](plug-in/PDFSplitPages), etc.), or uploading the PDF to a content management system or cloud service such as [Slack](https://slack.com/), FileStack, or Amazon S3.
+Win2PDF functionality can be extended through plug-ins, and this repository contains [sample plug-ins](/plug-in) written in .NET. You can extend the features of Win2PDF by interfacing with external applications such as [Outlook](/plug-in/PDFSendToOutlook), by using the [command line interface](https://www.win2pdf.com/doc/win2pdf-desktop-command-line.html) to perform additional PDF operations ([multiple watermarks](/plug-in/PDFMultipleWatermarks), [flattening](plug-in/PDFImageOnlyFlatten), [split pages](plug-in/PDFSplitPages), etc.), or uploading the PDF to a content management system or cloud service such as [Slack](https://slack.com/), FileStack, or Amazon S3.
 
 Contact support@win2pdf.com if you have any requests for plug-ins or would like a compiled version of any sample plug-in.
  
