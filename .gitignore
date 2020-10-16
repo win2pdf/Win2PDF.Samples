@@ -359,3 +359,5 @@ plug-in/PDFSplitPages/Output/Win2PDF-Split-Pages-Plug-In.exe
 plug-in/PDFSplitPages/.idea/*
 plug-in/PDFMultipleWatermarks/Output/Win2PDF-Apply-Muliple-Watermarks-Plug-In.exe
 *.sln
+plug-in/PDFMakeSearchable/Output/Win2PDF-Make-Searchable-Plug-In.exe
+plug-in/PDFSendToOutlook/Output/Win2PDF-Send-To-Outlook-Plug-In.exe

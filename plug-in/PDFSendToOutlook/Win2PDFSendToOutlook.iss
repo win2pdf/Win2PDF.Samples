@@ -48,5 +48,26 @@ Source: "VB.NET\bin\Release\OutlookApi.xml"; DestDir: "{app}"; Flags: ignorevers
 ;use HKLM to install for all users
 ;use "SOFTWARE\Dane Prairie Systems\PrinterName" to install for a specific printer
 Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; ValueType:string; ValueName: "default post action"; ValueData: "{app}\{#MyAppExeName} ""%s"""; Flags: uninsdeletevalue
-;Allow user to turn "Send to Slack" on or off in the Win2PDF File Save window
+;Allow user to turn "Send to Outlook" on or off in the Win2PDF File Save window. Remove this to always apply.
 Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; ValueType:string; ValueName: "post action checkbox label"; ValueData: "Send To Outlook"; Flags: uninsdeletevalue
+
+[Code]
+function InitializeSetup(): Boolean;
+var
+  plugin_installed: String;
+begin
+  //check if another plug-in is already installed
+  if RegQueryStringValue(HKEY_CURRENT_USER, 'Software\Dane Prairie Systems\Win2PDF', 
+    'default post action', plugin_installed) then
+    if Pos(ExpandConstant('{#MyAppExeName}'), plugin_installed) = 0 then
+      begin
+        MsgBox('Another Win2PDF plug-in is already installed.  Please uninstall from Add or Remove Programs.', mbCriticalError, MB_OK);
+        result := false;
+      end
+    else //the current Win2PDF plug is installed, allow an upgrade
+      begin
+        result := true;
+      end
+  else
+    result := true;
+end;
