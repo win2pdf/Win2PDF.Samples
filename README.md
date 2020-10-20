@@ -3,15 +3,15 @@
 
 [Win2PDF](https://www.win2pdf.com) is a Windows printer driver for creating graphics files from any Windows app in the following formats:
  * [PDF](https://www.win2pdf.com/doc/index.html)
- * [PDF/A](https://www.win2pdf.com/doc/create-pdf-a.html)
- * [PDF Image Only](https://www.win2pdf.com/doc/create-pdf-image-only.html) (color or monochrome)
- * [XPS](https://www.win2pdf.com/doc/create-xps.html)
- * [SVG](https://www.win2pdf.com/doc/create-svg.html)
- * [TIFF](https://www.win2pdf.com/doc/create-tiff.html) (color or monochrome)
- * [JPEG](https://www.win2pdf.com/doc/create-jpg-gif-png-bmp-image.html)
- * [GIF](https://www.win2pdf.com/doc/create-jpg-gif-png-bmp-image.html)
- * [PNG](https://www.win2pdf.com/doc/create-jpg-gif-png-bmp-image.html)
- * [BMP](https://www.win2pdf.com/doc/create-jpg-gif-png-bmp-image.html)
+ * [PDF/A](https://www.win2pdf.com/doc/print-to-pdf-a.html)
+ * [PDF Image Only](https://www.win2pdf.com/doc/print-to-pdf-image-only.html) (color or monochrome)
+ * [XPS](https://www.win2pdf.com/doc/print-to-xps.html)
+ * [SVG](https://www.win2pdf.com/doc/print-to-svg.html)
+ * [TIFF](https://www.win2pdf.com/doc/print-to-tiff.html) (color or monochrome)
+ * [JPEG](https://www.win2pdf.com/doc/print-to-jpg.html)
+ * [GIF](https://www.win2pdf.com/doc/print-to-gif.html)
+ * [PNG](https://www.win2pdf.com/doc/print-to-png.html)
+ * [BMP](https://www.win2pdf.com/doc/print-to-bmp.html)
  
 Win2PDF supports a [developer interface](https://www.win2pdf.com/doc/registryoverview.html) and also supports a [command line interface](https://www.win2pdf.com/doc/win2pdf-desktop-command-line.html) for creating and manipulating PDF files.
 
