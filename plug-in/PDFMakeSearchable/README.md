@@ -4,7 +4,7 @@ This sample shows how to create a Win2PDF plug-in to make an Image Only PDF crea
 
 ![Win2PDF Make Searchable Plug-in](https://www.win2pdf.com/assets/images/win2pdf/plug-in/win2pdf-make-searchable-plug-in.png)
 
-You can download a compiled version at: https://storage.googleapis.com/get.win2pdf.com/plug-in/Win2PDF-Make-Searchable-Plug-In.exe
+You can download a compiled version at: https://get.win2pdf.com/plug-in/Win2PDF-Make-Searchable-Plug-In.exe
 
 The Win2PDFMakeSearchable.iss [Inno Setup](https://jrsoftware.org/isinfo.php) script creates a setup program that can be used to install the plug-in.
 
