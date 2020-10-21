@@ -2,7 +2,7 @@
 
 This sample shows how to create a Win2PDF plug-in to automatically delete pages from newly created PDFs.  Some applications have margin issues that cause extra pages to be generated in printed output.  This plug-in deletes these extra pages automatically.
 
-![Win2PDF Delete Extra Pages Plug-in](https://www.win2pdf.com/assets/images/win2pdf/plug-in/win2pdf-delete-pages-plug-in.png)
+![Win2PDF Delete Extra Pages Plug-in](https://www.win2pdf.com/assets/images/win2pdf/plug-in/win2pdf-delete-extra-pages-plug-in.png)
 
 The Win2PDFDeletePages.iss [Inno Setup](https://jrsoftware.org/isinfo.php) script creates a setup program that can be used to install the plug-in.
 
