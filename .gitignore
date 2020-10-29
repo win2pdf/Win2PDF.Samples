@@ -361,3 +361,7 @@ plug-in/PDFMultipleWatermarks/Output/Win2PDF-Apply-Muliple-Watermarks-Plug-In.ex
 *.sln
 plug-in/PDFMakeSearchable/Output/Win2PDF-Make-Searchable-Plug-In.exe
 plug-in/PDFSendToOutlook/Output/Win2PDF-Send-To-Outlook-Plug-In.exe
+plug-in/PDFDuplicateFile/Output/Win2PDF-Duplicate-File-Plug-In.exe
+plug-in/PDFMultipleWatermarks/Output/Win2PDF-Apply-Multiple-Watermarks-Plug-In.exe
+plug-in/signexe.bat
+plug-in/buildall.bat

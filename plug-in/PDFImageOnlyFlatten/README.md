@@ -4,4 +4,4 @@ This sample shows how to create a Win2PDF plug in to automatically merge multipl
 
 The Win2PDFImageOnlyFlatten.iss [Inno Setup](https://jrsoftware.org/isinfo.php) script creates a setup program that can be used to install the plug-in.
 
-This plug-in uses the [Win2PDF command line](https://www.win2pdf.com/doc/win2pdf-desktop-command-line.html) to [print to an image only PDF](https://www.win2pdf.com/doc/command-line-print-pdf.html).  Contact support@win2pdf.com for a time limited evaluation license.
+This plug-in uses the [Win2PDF command line](https://www.win2pdf.com/doc/win2pdf-desktop-command-line.html) to [print to an image only PDF](https://www.win2pdf.com/doc/command-line-print-pdf.html) and requres that [Win2PDF](https://www.win2pdf.com/download/download.htm) is installed.  Contact support@win2pdf.com for a time limited evaluation license.
