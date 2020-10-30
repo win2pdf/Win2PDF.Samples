@@ -2,6 +2,10 @@
 
 [PDF Send To Outlook](/plug-in/PDFSendToOutlook) - Add a "Send To Outlook" option to Win2PDF File Save window to automatically attach a PDF to an Outlook email message
 
+[PDF Duplicate File](/plug-in/PDFDuplicateFile) - Automatically make a duplicate copy of the newly created PDF file in a designated duplicate file folder which may reside on a shared network location or in a cloud based folder (OneDrive, DropBox, Google Drive).
+
+[PDF Archvive File](/plug-in/PDFArchiveFile) -  Automatically archive newly created PDF files created by Win2PDF in a designated archive file folder which may reside on a shared network location or in a cloud based folder (OneDrive, DropBox, Google Drive). Files are appended to an archive PDF named based on the current date.
+
 [PDF Delete Pages](/plug-in/PDFDeletePages) - Automatically deletes extra pages from a newly created PDF
 
 [PDF Split Pages](/plug-in/PDFSplitPages) - Automatically splits a multi-page PDF into separate one page PDFs

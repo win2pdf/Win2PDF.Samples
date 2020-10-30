@@ -45,6 +45,9 @@ Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; Val
 ;Allow user to turn "Apply Multiple Watermarks" on or off in the Win2PDF File Save window. Remove this to always apply.
 Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; ValueType:string; ValueName: "post action checkbox label"; ValueData: "Apply Multiple Watermarks"; Flags: uninsdeletevalue
 
+[Icons]
+Name: "{group}\Configure Win2PDF Multiple Watermarks"; Filename: "{app}\{#MyAppExeName}"; WorkingDir: "{app}"
+
 [Code]
 function InitializeSetup(): Boolean;
 var
