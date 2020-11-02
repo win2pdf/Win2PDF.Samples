@@ -365,3 +365,4 @@ plug-in/PDFDuplicateFile/Output/Win2PDF-Duplicate-File-Plug-In.exe
 plug-in/PDFMultipleWatermarks/Output/Win2PDF-Apply-Multiple-Watermarks-Plug-In.exe
 plug-in/signexe.bat
 plug-in/buildall.bat
+plug-in/PDFArchiveFile/Output/Win2PDF-Archive-File-Plug-In.exe

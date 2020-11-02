@@ -20,9 +20,11 @@ Module PDFDuplicateFile
                 bkfolder.ShowDialog()
             ElseIf args.Length = 1 Then 'the only parameter is the PDF file name
                 Dim dupfolder As String = Interaction.GetSetting(WIN2PDF_COMPANY, WIN2PDF_PRODUCT, DUPFOLDER_SETTING, My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\backup")
+                If Not dupfolder.EndsWith("\") Then dupfolder += "\"
+                If Not Directory.Exists(dupfolder) Then Directory.CreateDirectory(dupfolder)
 
                 If File.Exists(args(0)) Then
-                    Dim destfile As String = Path.GetDirectoryName(dupfolder) + "\" + Path.GetFileName(args(0))
+                    Dim destfile As String = Path.GetDirectoryName(dupfolder) + Path.GetFileName(args(0))
                     'overwrite the destination file if it exists
                     If File.Exists(destfile) Then
                         File.Delete(destfile)

@@ -28,9 +28,18 @@ static class PDFDuplicateFile
             {
                 string dupfolder = Interaction.GetSetting(WIN2PDF_COMPANY, WIN2PDF_PRODUCT, DUPFOLDER_SETTING, Environment.SpecialFolder.MyDocuments + @"\backup" );
 
+                if (!dupfolder.EndsWith(@"\"))
+                {
+                    dupfolder += @"\";
+                }
+                if (!Directory.Exists(dupfolder))
+                {
+                    Directory.CreateDirectory(dupfolder);
+                }
+
                 if (File.Exists(args[0]))
                 {
-                    string destfile = Path.GetDirectoryName(dupfolder) + @"\" + Path.GetFileName(args[0]);
+                    string destfile = Path.GetDirectoryName(dupfolder) + Path.GetFileName(args[0]);
                     // overwrite the destination file if it exists
                     if (File.Exists(destfile))
                     {
