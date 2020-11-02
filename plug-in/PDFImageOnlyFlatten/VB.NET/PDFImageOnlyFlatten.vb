@@ -15,7 +15,8 @@ Module PDFImageOnlyFlatten
 
             If args.Length = 1 Then 'the only parameter is the PDF file name
                 Dim newfile As String = Path.GetDirectoryName(args(0)) + "\" + WIN2PDF_FLATTEN_TEMPFILE
-                If (Not args(0).ToString.Equals(newfile)) Then 'skip recursive call from printpdf command line
+                If Not args(0).ToString.Equals(newfile) _ 'skip recursive call from printpdf command line
+                    AndAlso Path.GetExtension(args(0)).ToUpper = ".PDF" Then 'ignore if not PDF
                     Dim newProc As Diagnostics.Process
                     Dim win2pdfcmdline = Environment.SystemDirectory
 

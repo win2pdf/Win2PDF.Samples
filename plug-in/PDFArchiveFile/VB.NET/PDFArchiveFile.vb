@@ -63,18 +63,20 @@ Module PDFArchiveFile
                 Dim bkfolder As New ChooseBackupFolder
                 bkfolder.ShowDialog()
             ElseIf args.Length = 1 Then 'the only parameter is the PDF file name
-                Dim arcfolder As String = Interaction.GetSetting(WIN2PDF_COMPANY, WIN2PDF_PRODUCT, ARCHIVE_FOLDER_SETTING, My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\backup\")
+                If Path.GetExtension(args(0)).ToUpper = ".PDF" Then 'ignore if not PDF
+                    Dim arcfolder As String = Interaction.GetSetting(WIN2PDF_COMPANY, WIN2PDF_PRODUCT, ARCHIVE_FOLDER_SETTING, My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\backup\")
 
-                If Not arcfolder.EndsWith("\") Then arcfolder += "\"
-                If Not Directory.Exists(arcfolder) Then Directory.CreateDirectory(arcfolder)
+                    If Not arcfolder.EndsWith("\") Then arcfolder += "\"
+                    If Not Directory.Exists(arcfolder) Then Directory.CreateDirectory(arcfolder)
 
-                If File.Exists(args(0)) Then
-                    Dim destfile As String = arcfolder + DateTime.Now.ToString("yyyy-MM-dd") + ".pdf"
-                    'overwrite the destination file if it exists
-                    If File.Exists(destfile) Then
-                        AppendPDF(args(0), destfile)
-                    Else
-                        File.Copy(args(0), destfile)
+                    If File.Exists(args(0)) Then
+                        Dim destfile As String = arcfolder + DateTime.Now.ToString("yyyy-MM-dd") + ".pdf"
+                        'overwrite the destination file if it exists
+                        If File.Exists(destfile) Then
+                            AppendPDF(args(0), destfile)
+                        Else
+                            File.Copy(args(0), destfile)
+                        End If
                     End If
                 End If
             Else

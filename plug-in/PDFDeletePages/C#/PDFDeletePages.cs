@@ -11,54 +11,57 @@ static class PDFDeletePages
         {
             if (args.Length == 1)
             {
-                System.Diagnostics.Process newProc;
-                var win2pdfcmdline = Environment.SystemDirectory;
-
-                // get the path to the Win2PDF command line executable
-                if (Environment.Is64BitOperatingSystem)
+                if (Path.GetExtension(args[0]).ToUpper() == ".PDF") //ignore if not PDF
                 {
-                    win2pdfcmdline += @"\spool\drivers\x64\3\win2pdfd.exe";
-                }
-                else
-                {
-                    win2pdfcmdline += @"\spool\drivers\w32x86\3\win2pdfd.exe";
-                }
+                    System.Diagnostics.Process newProc;
+                    var win2pdfcmdline = Environment.SystemDirectory;
 
-                if (File.Exists(win2pdfcmdline))
-                {
-                    string truncated_file = args[0] + ".pdf";
-
-                    // enclose the file names in quotes in case they contain spaces
-                    // delete pages 2-9999. command line documented at: https://www.win2pdf.com/doc/command-line-delete-pages-pdf.html
-                    string arguments = string.Format("deletepages \"{0}\" 2 9999 \"{1}\"", args[0], truncated_file);
-
-                    ProcessStartInfo startInfo = new ProcessStartInfo(win2pdfcmdline);
+                    // get the path to the Win2PDF command line executable
+                    if (Environment.Is64BitOperatingSystem)
                     {
-                        var withBlock = startInfo;
-                        withBlock.Arguments = arguments;
-                        withBlock.WindowStyle = ProcessWindowStyle.Hidden;
+                        win2pdfcmdline += @"\spool\drivers\x64\3\win2pdfd.exe";
+                    }
+                    else
+                    {
+                        win2pdfcmdline += @"\spool\drivers\w32x86\3\win2pdfd.exe";
                     }
 
-                    // execute the deletepages command
-                    newProc = System.Diagnostics.Process.Start(startInfo);
-                    newProc.WaitForExit();
-                    if (newProc.HasExited)
+                    if (File.Exists(win2pdfcmdline))
                     {
-                        if (newProc.ExitCode == 0)
+                        string truncated_file = args[0] + ".pdf";
+
+                        // enclose the file names in quotes in case they contain spaces
+                        // delete pages 2-9999. command line documented at: https://www.win2pdf.com/doc/command-line-delete-pages-pdf.html
+                        string arguments = string.Format("deletepages \"{0}\" 2 9999 \"{1}\"", args[0], truncated_file);
+
+                        ProcessStartInfo startInfo = new ProcessStartInfo(win2pdfcmdline);
                         {
-                            // copy truncated PDF to original file name
-                            if (File.Exists(args[0]))
-                                File.Delete(args[0]);
-                            File.Move(truncated_file, args[0]);
+                            var withBlock = startInfo;
+                            withBlock.Arguments = arguments;
+                            withBlock.WindowStyle = ProcessWindowStyle.Hidden;
                         }
-                        // if there are no pages to delete, the deletepages command returns a failure code
-                        // ignore the error since we can't tell if it's a 1 page PDF
-                        // else MessageBox.Show(string.Format("Win2PDF command line failed, make sure Win2PDF is licensed: {0} {1}, error code {2}", win2pdfcmdline, arguments, newProc.ExitCode));
+
+                        // execute the deletepages command
+                        newProc = System.Diagnostics.Process.Start(startInfo);
+                        newProc.WaitForExit();
+                        if (newProc.HasExited)
+                        {
+                            if (newProc.ExitCode == 0)
+                            {
+                                // copy truncated PDF to original file name
+                                if (File.Exists(args[0]))
+                                    File.Delete(args[0]);
+                                File.Move(truncated_file, args[0]);
+                            }
+                            // if there are no pages to delete, the deletepages command returns a failure code
+                            // ignore the error since we can't tell if it's a 1 page PDF
+                            // else MessageBox.Show(string.Format("Win2PDF command line failed, make sure Win2PDF is licensed: {0} {1}, error code {2}", win2pdfcmdline, arguments, newProc.ExitCode));
+                        }
                     }
-                }
-                else
-                {
-                    MessageBox.Show(string.Format("Win2PDF is not installed.  Download Win2PDF at https://www.win2pdf.com/download/"));
+                    else
+                    {
+                        MessageBox.Show(string.Format("Win2PDF is not installed.  Download Win2PDF at https://www.win2pdf.com/download/"));
+                    }
                 }
             }
             else

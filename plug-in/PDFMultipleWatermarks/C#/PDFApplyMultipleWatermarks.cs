@@ -50,67 +50,70 @@ static class PDFApplyMultipleWatermarks
 
             if (args.Length == 1)
             {
-                System.Diagnostics.Process newProc;
-                var win2pdfcmdline = Environment.SystemDirectory;
-
-                // get the path to the Win2PDF command line executable
-                if (Environment.Is64BitOperatingSystem)
+                if (Path.GetExtension(args[0]).ToUpper() == ".PDF") //ignore if not PDF
                 {
-                    win2pdfcmdline += @"\spool\drivers\x64\3\win2pdfd.exe";
-                }
-                else
-                {
-                    win2pdfcmdline += @"\spool\drivers\w32x86\3\win2pdfd.exe";
-                }
+                    System.Diagnostics.Process newProc;
+                    var win2pdfcmdline = Environment.SystemDirectory;
 
-                if (File.Exists(win2pdfcmdline))
-                {
-
-                    // enclose the file names in quotes in case they contain spaces
-                    // watermark command line documented at: https://www.win2pdf.com/doc/command-line-watermark-pdf.html
-                    // apply watermark to only first page
-                    Debug.Assert(File.Exists(first_page_watermark));
-                    string arguments1 = string.Format("watermark \"{0}\" \"{1}\" \"{2}\" watermark -1 0", args[0], first_page_watermark, args[0]);
-
-                    // apply watermark to all pages except the first page
-                    Debug.Assert(File.Exists(remaining_page_watermark));
-                    string arguments2 = string.Format("watermark \"{0}\" \"{1}\" \"{2}\" watermark 1 0", args[0], remaining_page_watermark, args[0]);
-
-                    ProcessStartInfo startInfo = new ProcessStartInfo(win2pdfcmdline);
+                    // get the path to the Win2PDF command line executable
+                    if (Environment.Is64BitOperatingSystem)
                     {
-                        var withBlock = startInfo;
-                        withBlock.Arguments = arguments1;
-                        withBlock.WindowStyle = ProcessWindowStyle.Hidden;
+                        win2pdfcmdline += @"\spool\drivers\x64\3\win2pdfd.exe";
+                    }
+                    else
+                    {
+                        win2pdfcmdline += @"\spool\drivers\w32x86\3\win2pdfd.exe";
                     }
 
-                    // execute the watermark command line for the first page
-                    newProc = System.Diagnostics.Process.Start(startInfo);
-                    newProc.WaitForExit();
-                    if (newProc.HasExited)
+                    if (File.Exists(win2pdfcmdline))
                     {
-                        if (newProc.ExitCode != 0)
+
+                        // enclose the file names in quotes in case they contain spaces
+                        // watermark command line documented at: https://www.win2pdf.com/doc/command-line-watermark-pdf.html
+                        // apply watermark to only first page
+                        Debug.Assert(File.Exists(first_page_watermark));
+                        string arguments1 = string.Format("watermark \"{0}\" \"{1}\" \"{2}\" watermark -1 0", args[0], first_page_watermark, args[0]);
+
+                        // apply watermark to all pages except the first page
+                        Debug.Assert(File.Exists(remaining_page_watermark));
+                        string arguments2 = string.Format("watermark \"{0}\" \"{1}\" \"{2}\" watermark 1 0", args[0], remaining_page_watermark, args[0]);
+
+                        ProcessStartInfo startInfo = new ProcessStartInfo(win2pdfcmdline);
                         {
-                            System.Windows.Forms.MessageBox.Show(string.Format("Win2PDF command line failed, make sure Win2PDF Pro is licensed: {0} {1}, error code {2}", win2pdfcmdline, arguments1, newProc.ExitCode));
+                            var withBlock = startInfo;
+                            withBlock.Arguments = arguments1;
+                            withBlock.WindowStyle = ProcessWindowStyle.Hidden;
                         }
-                        else
+
+                        // execute the watermark command line for the first page
+                        newProc = System.Diagnostics.Process.Start(startInfo);
+                        newProc.WaitForExit();
+                        if (newProc.HasExited)
                         {
-                            startInfo.Arguments = arguments2;
-                            // execute the watermark command line for the remaining pages
-                            newProc = System.Diagnostics.Process.Start(startInfo);
-                            newProc.WaitForExit();
-                            if (newProc.HasExited)
+                            if (newProc.ExitCode != 0)
                             {
-                                if (newProc.ExitCode != 0)
+                                System.Windows.Forms.MessageBox.Show(string.Format("Win2PDF command line failed, make sure Win2PDF Pro is licensed: {0} {1}, error code {2}", win2pdfcmdline, arguments1, newProc.ExitCode));
+                            }
+                            else
+                            {
+                                startInfo.Arguments = arguments2;
+                                // execute the watermark command line for the remaining pages
+                                newProc = System.Diagnostics.Process.Start(startInfo);
+                                newProc.WaitForExit();
+                                if (newProc.HasExited)
                                 {
-                                    System.Windows.Forms.MessageBox.Show(string.Format("Win2PDF command line failed, make sure Win2PDF Pro is licensed: {0} {1}, error code {2}", win2pdfcmdline, arguments2, newProc.ExitCode));
+                                    if (newProc.ExitCode != 0)
+                                    {
+                                        System.Windows.Forms.MessageBox.Show(string.Format("Win2PDF command line failed, make sure Win2PDF Pro is licensed: {0} {1}, error code {2}", win2pdfcmdline, arguments2, newProc.ExitCode));
+                                    }
                                 }
                             }
                         }
                     }
-                }
-                else
-                {
-                    System.Windows.Forms.MessageBox.Show(string.Format("Win2PDF Pro is not installed.  Download Win2PDF at https://www.win2pdf.com/download/"));
+                    else
+                    {
+                        System.Windows.Forms.MessageBox.Show(string.Format("Win2PDF Pro is not installed.  Download Win2PDF at https://www.win2pdf.com/download/"));
+                    }
                 }
             }
         }

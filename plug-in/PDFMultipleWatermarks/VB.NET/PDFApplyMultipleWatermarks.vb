@@ -43,54 +43,56 @@ Module PDFApplyMultipleWatermarks
             End If
 
             If args.Length = 1 Then 'the only parameter is the PDF file name
-                Dim newProc As Diagnostics.Process
-                Dim win2pdfcmdline = Environment.SystemDirectory
+                If Path.GetExtension(args(0)).ToUpper = ".PDF" Then 'ignore if not PDF
+                    Dim newProc As Diagnostics.Process
+                    Dim win2pdfcmdline = Environment.SystemDirectory
 
-                'get the path to the Win2PDF command line executable
-                If Environment.Is64BitOperatingSystem Then
-                    win2pdfcmdline += "\spool\drivers\x64\3\win2pdfd.exe"
-                Else
-                    win2pdfcmdline += "\spool\drivers\w32x86\3\win2pdfd.exe"
-                End If
+                    'get the path to the Win2PDF command line executable
+                    If Environment.Is64BitOperatingSystem Then
+                        win2pdfcmdline += "\spool\drivers\x64\3\win2pdfd.exe"
+                    Else
+                        win2pdfcmdline += "\spool\drivers\w32x86\3\win2pdfd.exe"
+                    End If
 
-                If File.Exists(win2pdfcmdline) Then
+                    If File.Exists(win2pdfcmdline) Then
 
-                    'enclose the file names in quotes in case they contain spaces
-                    'watermark command line documented at: https://www.win2pdf.com/doc/command-line-watermark-pdf.html
-                    'apply watermark to only first page
-                    Debug.Assert(File.Exists(first_page_watermark))
-                    Dim arguments1 As String = String.Format("watermark ""{0}"" ""{1}"" ""{2}"" watermark -1 0", args(0), first_page_watermark, args(0))
+                        'enclose the file names in quotes in case they contain spaces
+                        'watermark command line documented at: https://www.win2pdf.com/doc/command-line-watermark-pdf.html
+                        'apply watermark to only first page
+                        Debug.Assert(File.Exists(first_page_watermark))
+                        Dim arguments1 As String = String.Format("watermark ""{0}"" ""{1}"" ""{2}"" watermark -1 0", args(0), first_page_watermark, args(0))
 
-                    'apply watermark to all pages except the first page
-                    Debug.Assert(File.Exists(remaining_page_watermark))
-                    Dim arguments2 As String = String.Format("watermark ""{0}"" ""{1}"" ""{2}"" watermark 1 0", args(0), remaining_page_watermark, args(0))
+                        'apply watermark to all pages except the first page
+                        Debug.Assert(File.Exists(remaining_page_watermark))
+                        Dim arguments2 As String = String.Format("watermark ""{0}"" ""{1}"" ""{2}"" watermark 1 0", args(0), remaining_page_watermark, args(0))
 
-                    Dim startInfo As New ProcessStartInfo(win2pdfcmdline)
-                    With startInfo
-                        .Arguments = arguments1
-                        .WindowStyle = ProcessWindowStyle.Hidden
-                    End With
+                        Dim startInfo As New ProcessStartInfo(win2pdfcmdline)
+                        With startInfo
+                            .Arguments = arguments1
+                            .WindowStyle = ProcessWindowStyle.Hidden
+                        End With
 
-                    'execute the watermark command line for the first page
-                    newProc = Diagnostics.Process.Start(startInfo)
-                    newProc.WaitForExit()
-                    If newProc.HasExited Then
-                        If newProc.ExitCode <> 0 Then
-                            Windows.Forms.MessageBox.Show(String.Format("Win2PDF command line failed, make sure Win2PDF Pro is licensed: {0} {1}, error code {2}", win2pdfcmdline, arguments1, newProc.ExitCode))
-                        Else
-                            startInfo.Arguments = arguments2
-                            'execute the watermark command line for the remaining pages
-                            newProc = Diagnostics.Process.Start(startInfo)
-                            newProc.WaitForExit()
-                            If newProc.HasExited Then
-                                If newProc.ExitCode <> 0 Then
-                                    Windows.Forms.MessageBox.Show(String.Format("Win2PDF command line failed, make sure Win2PDF Pro is licensed: {0} {1}, error code {2}", win2pdfcmdline, arguments2, newProc.ExitCode))
+                        'execute the watermark command line for the first page
+                        newProc = Diagnostics.Process.Start(startInfo)
+                        newProc.WaitForExit()
+                        If newProc.HasExited Then
+                            If newProc.ExitCode <> 0 Then
+                                Windows.Forms.MessageBox.Show(String.Format("Win2PDF command line failed, make sure Win2PDF Pro is licensed: {0} {1}, error code {2}", win2pdfcmdline, arguments1, newProc.ExitCode))
+                            Else
+                                startInfo.Arguments = arguments2
+                                'execute the watermark command line for the remaining pages
+                                newProc = Diagnostics.Process.Start(startInfo)
+                                newProc.WaitForExit()
+                                If newProc.HasExited Then
+                                    If newProc.ExitCode <> 0 Then
+                                        Windows.Forms.MessageBox.Show(String.Format("Win2PDF command line failed, make sure Win2PDF Pro is licensed: {0} {1}, error code {2}", win2pdfcmdline, arguments2, newProc.ExitCode))
+                                    End If
                                 End If
                             End If
                         End If
+                    Else
+                        Windows.Forms.MessageBox.Show(String.Format("Win2PDF Pro is not installed.  Download Win2PDF at https://www.win2pdf.com/download/"))
                     End If
-                Else
-                    Windows.Forms.MessageBox.Show(String.Format("Win2PDF Pro is not installed.  Download Win2PDF at https://www.win2pdf.com/download/"))
                 End If
             End If
         Catch ex As Exception

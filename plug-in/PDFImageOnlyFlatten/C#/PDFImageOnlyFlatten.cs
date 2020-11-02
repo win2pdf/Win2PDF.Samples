@@ -13,57 +13,74 @@ static class PDFImageOnlyFlatten
         {
             if (args.Length == 1)
             {
-                string newfile = Path.GetDirectoryName(args[0]) + @"\" + WIN2PDF_FLATTEN_TEMPFILE;
-                if ((!args[0].ToString().Equals(newfile)))
+                if (Path.GetExtension(args[0]).ToUpper() == ".PDF") //ignore if not PDF
                 {
-                    System.Diagnostics.Process newProc;
-                    var win2pdfcmdline = Environment.SystemDirectory;
-
-                    // get the path to the Win2PDF command line executable
-                    if (Environment.Is64BitOperatingSystem)
-                        win2pdfcmdline += @"\spool\drivers\x64\3\win2pdfd.exe";
-                    else
-                        win2pdfcmdline += @"\spool\drivers\w32x86\3\win2pdfd.exe";
-
-                    if (File.Exists(win2pdfcmdline))
+                    string newfile = Path.GetDirectoryName(args[0]) + @"\" + WIN2PDF_FLATTEN_TEMPFILE;
+                    if ((!args[0].ToString().Equals(newfile)))
                     {
-                        // copy original PDF file to temporary name, and use original PDF file as destination
-                        if (File.Exists(newfile))
-                            File.Delete(newfile);
-                        File.Move(args[0], newfile);
+                        System.Diagnostics.Process newProc;
+                        var win2pdfcmdline = Environment.SystemDirectory;
 
-                        // enclose the file names in quotes in case they contain spaces, 
-                        // use ".pdfc" as destination to force "PDF Image Only (color)"
-                        // change destination to ".pdfi" to force "PDF Image Only (monochrome)"
-                        // use "Win2Image" printer so the plug-in isn't called recursively
-                        string arguments = string.Format("printpdf \"{0}\" \"{1}\" \"{2}\"", newfile, "Win2Image", args[0] + "c");
-
-                        ProcessStartInfo startInfo = new ProcessStartInfo(win2pdfcmdline);
+                        // get the path to the Win2PDF command line executable
+                        if (Environment.Is64BitOperatingSystem)
                         {
-                            var withBlock = startInfo;
-                            withBlock.Arguments = arguments;
-                            withBlock.WindowStyle = ProcessWindowStyle.Hidden;
+                            win2pdfcmdline += @"\spool\drivers\x64\3\win2pdfd.exe";
+                        }
+                        else
+                        {
+                            win2pdfcmdline += @"\spool\drivers\w32x86\3\win2pdfd.exe";
                         }
 
-                        // execute the printpdf command line to create an Image Only PDF
-                        newProc = System.Diagnostics.Process.Start(startInfo);
-                        newProc.WaitForExit();
-                        if (newProc.HasExited)
+                        if (File.Exists(win2pdfcmdline))
                         {
-                            // delete temp file
+                            // copy original PDF file to temporary name, and use original PDF file as destination
                             if (File.Exists(newfile))
+                            {
                                 File.Delete(newfile);
+                            }
+                            File.Move(args[0], newfile);
 
-                            if (newProc.ExitCode != 0)
-                                MessageBox.Show(string.Format("Win2PDF command line failed: {0} {1}, error code {2}", win2pdfcmdline, arguments, newProc.ExitCode));
+                            // enclose the file names in quotes in case they contain spaces, 
+                            // use ".pdfc" as destination to force "PDF Image Only (color)"
+                            // change destination to ".pdfi" to force "PDF Image Only (monochrome)"
+                            // use "Win2Image" printer so the plug-in isn't called recursively
+                            string arguments = string.Format("printpdf \"{0}\" \"{1}\" \"{2}\"", newfile, "Win2Image", args[0] + "c");
+
+                            ProcessStartInfo startInfo = new ProcessStartInfo(win2pdfcmdline);
+                            {
+                                var withBlock = startInfo;
+                                withBlock.Arguments = arguments;
+                                withBlock.WindowStyle = ProcessWindowStyle.Hidden;
+                            }
+
+                            // execute the printpdf command line to create an Image Only PDF
+                            newProc = System.Diagnostics.Process.Start(startInfo);
+                            newProc.WaitForExit();
+                            if (newProc.HasExited)
+                            {
+                                // delete temp file
+                                if (File.Exists(newfile))
+                                {
+                                    File.Delete(newfile);
+                                }
+
+                                if (newProc.ExitCode != 0)
+                                {
+                                    MessageBox.Show(string.Format("Win2PDF command line failed: {0} {1}, error code {2}", win2pdfcmdline, arguments, newProc.ExitCode));
+                                }
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show(string.Format("Win2PDF is not installed.  Download Win2PDF at https://www.win2pdf.com/download/"));
                         }
                     }
-                    else
-                        MessageBox.Show(string.Format("Win2PDF is not installed.  Download Win2PDF at https://www.win2pdf.com/download/"));
                 }
             }
             else
+            {
                 MessageBox.Show("Invalid number of parameters");
+            }
         }
         catch (Exception ex)
         {

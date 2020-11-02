@@ -75,28 +75,31 @@ static class PDFArchiveFile
             }
             else if (args.Length == 1)
             {
-                string arcfolder = Interaction.GetSetting(WIN2PDF_COMPANY, WIN2PDF_PRODUCT, ARCHIVE_FOLDER_SETTING, Environment.SpecialFolder.MyDocuments + @"\backup\");
+                if (Path.GetExtension(args[0]).ToUpper() == ".PDF") //ignore if not PDF
+                {
+                    string arcfolder = Interaction.GetSetting(WIN2PDF_COMPANY, WIN2PDF_PRODUCT, ARCHIVE_FOLDER_SETTING, Environment.SpecialFolder.MyDocuments + @"\backup\");
 
-                if (!arcfolder.EndsWith(@"\"))
-                {
-                    arcfolder += @"\";
-                }
-                if (!Directory.Exists(arcfolder))
-                {
-                    Directory.CreateDirectory(arcfolder);
-                }
-
-                if (File.Exists(args[0]))
-                {
-                    string destfile = arcfolder + DateTime.Now.ToString("yyyy-MM-dd") + ".pdf";
-                    // overwrite the destination file if it exists
-                    if (File.Exists(destfile))
+                    if (!arcfolder.EndsWith(@"\"))
                     {
-                        AppendPDF(args[0], destfile);
+                        arcfolder += @"\";
                     }
-                    else
+                    if (!Directory.Exists(arcfolder))
                     {
-                        File.Copy(args[0], destfile);
+                        Directory.CreateDirectory(arcfolder);
+                    }
+
+                    if (File.Exists(args[0]))
+                    {
+                        string destfile = arcfolder + DateTime.Now.ToString("yyyy-MM-dd") + ".pdf";
+                        // overwrite the destination file if it exists
+                        if (File.Exists(destfile))
+                        {
+                            AppendPDF(args[0], destfile);
+                        }
+                        else
+                        {
+                            File.Copy(args[0], destfile);
+                        }
                     }
                 }
             }
