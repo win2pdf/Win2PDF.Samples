@@ -29,7 +29,7 @@ static class PDFArchiveFile
             // enclose the file names in quotes in case they contain spaces
             // watermark command line documented at: https://www.win2pdf.com/doc/command-line-append-pdf.html
             // apply letterhead watermark to only first page
-            string arguments1 = string.Format("append \"{0}\" \"{1}\" \"{2}\"", appendfile, destfile, destFileTemp);
+            string arguments1 = string.Format("append \"{0}\" \"{1}\" \"{2}\"", destfile, appendfile, destFileTemp);
 
             ProcessStartInfo startInfo = new ProcessStartInfo(win2pdfcmdline);
             {

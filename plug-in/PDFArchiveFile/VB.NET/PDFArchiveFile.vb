@@ -29,7 +29,7 @@ Module PDFArchiveFile
             'enclose the file names in quotes in case they contain spaces
             'watermark command line documented at: https://www.win2pdf.com/doc/command-line-append-pdf.html
             'apply letterhead watermark to only first page
-            Dim arguments1 As String = String.Format("append ""{0}"" ""{1}"" ""{2}""", appendfile, destfile, destFileTemp)
+            Dim arguments1 As String = String.Format("append ""{0}"" ""{1}"" ""{2}""", destfile, appendfile, destFileTemp)
 
             Dim startInfo As New ProcessStartInfo(win2pdfcmdline)
             With startInfo
