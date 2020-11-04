@@ -39,7 +39,7 @@ static class PDFDuplicateFile
 
                 if (File.Exists(args[0]))
                 {
-                    string destfile = Path.GetDirectoryName(dupfolder) + Path.GetFileName(args[0]);
+                    string destfile = dupfolder + Path.GetFileName(args[0]);
                     // overwrite the destination file if it exists
                     if (File.Exists(destfile))
                     {

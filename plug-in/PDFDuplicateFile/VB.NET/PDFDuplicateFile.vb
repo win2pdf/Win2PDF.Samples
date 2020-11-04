@@ -24,7 +24,7 @@ Module PDFDuplicateFile
                 If Not Directory.Exists(dupfolder) Then Directory.CreateDirectory(dupfolder)
 
                 If File.Exists(args(0)) Then
-                    Dim destfile As String = Path.GetDirectoryName(dupfolder) + Path.GetFileName(args(0))
+                    Dim destfile As String = dupfolder + Path.GetFileName(args(0))
                     'overwrite the destination file if it exists
                     If File.Exists(destfile) Then
                         File.Delete(destfile)
