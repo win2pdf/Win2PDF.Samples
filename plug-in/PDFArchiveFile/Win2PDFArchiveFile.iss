@@ -54,12 +54,34 @@ Name: "{group}\Configure Win2PDF Archive File Location"; Filename: "{app}\{#MyAp
 [Code]
 function InitializeSetup(): Boolean;
 var
-  plugin_installed: String;
+  MajorVersion: Cardinal;
+  BuildVersion: Cardinal;
+  pluginstalled: String;
+  ErrCode: Integer;
 begin
+  //check Win2PDF Pro first
+  if Not RegQueryDWordValue(HKEY_CURRENT_USER, 'Software\Dane Prairie Systems\Win2PDF Pro',
+     'Version', MajorVersion) then
+     if Not RegQueryDWordValue(HKEY_CURRENT_USER, 'Software\Dane Prairie Systems\Win2PDF',
+     'Version', MajorVersion) then
+        MajorVersion := 0;
+  if Not RegQueryDWordValue(HKEY_CURRENT_USER, 'Software\Dane Prairie Systems\Win2PDF Pro',
+      'Build', BuildVersion) then
+    if Not RegQueryDWordValue(HKEY_CURRENT_USER, 'Software\Dane Prairie Systems\Win2PDF',
+      'Build', BuildVersion) then
+      BuildVersion := 0;
+
+  // check if Win2PDF is installed
+  if ((MajorVersion = 0) and (BuildVersion = 0)) then
+    begin
+        MsgBox('Win2PDF is not installed. Download and and run the Win2PDF setup program before installing the plug-in.', mbCriticalError, MB_OK);
+        ShellExec('open', 'https://www.win2pdf.com/download/download.htm', '', '', SW_SHOW, ewNoWait, ErrCode);
+        result := false;
+    end
   //check if another plug-in is already installed
-  if RegQueryStringValue(HKEY_CURRENT_USER, 'Software\Dane Prairie Systems\Win2PDF', 
-    'default post action', plugin_installed) then
-    if Pos(ExpandConstant('{#MyAppExeName}'), plugin_installed) = 0 then
+  else if RegQueryStringValue(HKEY_CURRENT_USER, 'Software\Dane Prairie Systems\Win2PDF', 
+    'default post action', pluginstalled) then
+    if Pos(ExpandConstant('{#MyAppExeName}'), pluginstalled) = 0 then
       begin
         MsgBox('Another Win2PDF plug-in is already installed.  Please uninstall from Add or Remove Programs.', mbCriticalError, MB_OK);
         result := false;
@@ -71,4 +93,3 @@ begin
   else
     result := true;
 end;
-
