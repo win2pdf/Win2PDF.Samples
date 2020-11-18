@@ -45,46 +45,4 @@ Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; Val
 ;Allow user to turn "Delete Extra Pages" on or off in the Win2PDF File Save window. Remove this to always apply.
 Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; ValueType:string; ValueName: "post action checkbox label"; ValueData: "Delete Extra Pages"; Flags: uninsdeletevalue
 
-[Code]
-function InitializeSetup(): Boolean;
-var
-  MajorVersion: Cardinal;
-  BuildVersion: Cardinal;
-  pluginstalled: String;
-  ErrCode: Integer;
-begin
-  //check Win2PDF Pro first
-  if Not RegQueryDWordValue(HKEY_CURRENT_USER, 'Software\Dane Prairie Systems\Win2PDF Pro',
-     'Version', MajorVersion) then
-     if Not RegQueryDWordValue(HKEY_CURRENT_USER, 'Software\Dane Prairie Systems\Win2PDF',
-     'Version', MajorVersion) then
-        MajorVersion := 0;
-  if Not RegQueryDWordValue(HKEY_CURRENT_USER, 'Software\Dane Prairie Systems\Win2PDF Pro',
-      'Build', BuildVersion) then
-    if Not RegQueryDWordValue(HKEY_CURRENT_USER, 'Software\Dane Prairie Systems\Win2PDF',
-      'Build', BuildVersion) then
-      BuildVersion := 0;
-
-  // check if Win2PDF is installed
-  if ((MajorVersion = 0) and (BuildVersion = 0)) then
-    begin
-        MsgBox('Win2PDF is not installed. Download and and run the Win2PDF setup program before installing the plug-in.', mbCriticalError, MB_OK);
-        ShellExec('open', 'https://www.win2pdf.com/download/download.htm', '', '', SW_SHOW, ewNoWait, ErrCode);
-        result := false;
-    end
-  //check if another plug-in is already installed
-  else if RegQueryStringValue(HKEY_CURRENT_USER, 'Software\Dane Prairie Systems\Win2PDF', 
-    'default post action', pluginstalled) then
-    if Pos(ExpandConstant('{#MyAppExeName}'), pluginstalled) = 0 then
-      begin
-        MsgBox('Another Win2PDF plug-in is already installed.  Please uninstall from Add or Remove Programs.', mbCriticalError, MB_OK);
-        result := false;
-      end
-    else //the current Win2PDF plug is installed, allow an upgrade
-      begin
-        result := true;
-      end
-  else
-    result := true;
-end;
-
+#include "..\win2pdf-setup-code.iss"
