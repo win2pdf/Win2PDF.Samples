@@ -53,31 +53,57 @@ Filename: "{app}\{#MyAppExeName}"; WorkingDir: "{app}"; Description: "Configure 
 Name: "{group}\Configure Win2PDF Duplicate File Location"; Filename: "{app}\{#MyAppExeName}"; WorkingDir: "{app}"
 
 [Code]
+
+function GetWin2PDFFile: String;
+begin
+
+  if isWin64() Then
+  begin
+     Result := ExpandConstant('{sys}\spool\drivers\x64\3');
+  end
+  else
+  begin
+     Result := ExpandConstant('{sys}\spool\drivers\w32x86\3');
+  end;
+  Result := Result + '\win2pdf.exe';
+end;
+
 function InitializeSetup(): Boolean;
 var
   MajorVersion: Cardinal;
   pluginstalled: String;
   ErrCode: Integer;
+  Win2PDFInstalled: Boolean;
 begin
   //check Win2PDF Pro first
   if Not RegQueryDWordValue(HKEY_CURRENT_USER, 'Software\Dane Prairie Systems\Win2PDF Pro',
      'Version', MajorVersion) then
      if Not RegQueryDWordValue(HKEY_CURRENT_USER, 'Software\Dane Prairie Systems\Win2PDF',
      'Version', MajorVersion) then
-        MajorVersion := 0;
+        if Not RegQueryDWordValue(HKEY_LOCAL_MACHINE, 'Software\Dane Prairie Systems\Win2PDF Pro',
+        'Version', MajorVersion) then
+           if Not RegQueryDWordValue(HKEY_LOCAL_MACHINE, 'Software\Dane Prairie Systems\Win2PDF',
+           'Version', MajorVersion) then
+              MajorVersion := 0;
+
+  Win2PDFInstalled := FileExists(GetWin2PDFFile());
 
   Log('Win2PDF Version: ' + IntToStr(MajorVersion));
+  if Win2PDFInstalled then
+    Log('Win2PDF file found')
+  else
+    Log('Win2PDF file not found');
 
   // check if Win2PDF is installed
-  if (MajorVersion = 0) then
+  if ((MajorVersion = 0) And (Not Win2PDFInstalled)) then
     begin
-        MsgBox('Win2PDF is not installed. Download and and run the Win2PDF setup program before installing the plug-in.', mbCriticalError, MB_OK);
+        MsgBox('If Win2PDF is not installed, download and run the Win2PDF setup program before installing the plug-in.', mbCriticalError, MB_OK);
         ShellExec('open', 'https://www.win2pdf.com/download/download.htm', '', '', SW_SHOW, ewNoWait, ErrCode);
         result := false;
         Log('Win2PDF not found.');
-    end
+    end;
   //check if another plug-in is already installed
-  else if RegQueryStringValue(HKEY_CURRENT_USER, 'Software\Dane Prairie Systems\Win2PDF', 
+  if RegQueryStringValue(HKEY_CURRENT_USER, 'Software\Dane Prairie Systems\Win2PDF', 
     'default post action', pluginstalled) then
     if Pos(ExpandConstant('{#MyAppExeName}'), pluginstalled) = 0 then
       begin
