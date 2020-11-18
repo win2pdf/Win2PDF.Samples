@@ -70,32 +70,19 @@ end;
 
 function InitializeSetup(): Boolean;
 var
-  MajorVersion: Cardinal;
   pluginstalled: String;
   ErrCode: Integer;
   Win2PDFInstalled: Boolean;
 begin
-  //check Win2PDF Pro first
-  if Not RegQueryDWordValue(HKEY_CURRENT_USER, 'Software\Dane Prairie Systems\Win2PDF Pro',
-     'Version', MajorVersion) then
-     if Not RegQueryDWordValue(HKEY_CURRENT_USER, 'Software\Dane Prairie Systems\Win2PDF',
-     'Version', MajorVersion) then
-        if Not RegQueryDWordValue(HKEY_LOCAL_MACHINE, 'Software\Dane Prairie Systems\Win2PDF Pro',
-        'Version', MajorVersion) then
-           if Not RegQueryDWordValue(HKEY_LOCAL_MACHINE, 'Software\Dane Prairie Systems\Win2PDF',
-           'Version', MajorVersion) then
-              MajorVersion := 0;
-
   Win2PDFInstalled := FileExists(GetWin2PDFFile());
 
-  Log('Win2PDF Version: ' + IntToStr(MajorVersion));
   if Win2PDFInstalled then
     Log('Win2PDF file found')
   else
     Log('Win2PDF file not found');
 
   // check if Win2PDF is installed
-  if ((MajorVersion = 0) And (Not Win2PDFInstalled)) then
+  if (Not Win2PDFInstalled) then
     begin
         MsgBox('If Win2PDF is not installed, download and run the Win2PDF setup program before installing the plug-in.', mbCriticalError, MB_OK);
         ShellExec('open', 'https://www.win2pdf.com/download/download.htm', '', '', SW_SHOW, ewNoWait, ErrCode);
