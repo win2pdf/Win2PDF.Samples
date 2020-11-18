@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Win2PDF Duplicate File Plug-In"
-#define MyAppVersion "1.01"
+#define MyAppVersion "1.03"
 #define MyAppPublisher "Dane Prairie Systems, LLC"
 #define MyAppURL "https://www.win2pdf.com"
 #define MyAppExeName "PDFDuplicateFile.exe"
@@ -29,6 +29,7 @@ OutputBaseFilename=Win2PDF-Duplicate-File-Plug-In
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
+SetupLogging=yes
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -55,7 +56,6 @@ Name: "{group}\Configure Win2PDF Duplicate File Location"; Filename: "{app}\{#My
 function InitializeSetup(): Boolean;
 var
   MajorVersion: Cardinal;
-  BuildVersion: Cardinal;
   pluginstalled: String;
   ErrCode: Integer;
 begin
@@ -65,18 +65,16 @@ begin
      if Not RegQueryDWordValue(HKEY_CURRENT_USER, 'Software\Dane Prairie Systems\Win2PDF',
      'Version', MajorVersion) then
         MajorVersion := 0;
-  if Not RegQueryDWordValue(HKEY_CURRENT_USER, 'Software\Dane Prairie Systems\Win2PDF Pro',
-      'Build', BuildVersion) then
-    if Not RegQueryDWordValue(HKEY_CURRENT_USER, 'Software\Dane Prairie Systems\Win2PDF',
-      'Build', BuildVersion) then
-      BuildVersion := 0;
+
+  Log('Win2PDF Version: ' + IntToStr(MajorVersion));
 
   // check if Win2PDF is installed
-  if ((MajorVersion = 0) and (BuildVersion = 0)) then
+  if (MajorVersion = 0) then
     begin
         MsgBox('Win2PDF is not installed. Download and and run the Win2PDF setup program before installing the plug-in.', mbCriticalError, MB_OK);
         ShellExec('open', 'https://www.win2pdf.com/download/download.htm', '', '', SW_SHOW, ewNoWait, ErrCode);
         result := false;
+        Log('Win2PDF not found.');
     end
   //check if another plug-in is already installed
   else if RegQueryStringValue(HKEY_CURRENT_USER, 'Software\Dane Prairie Systems\Win2PDF', 
