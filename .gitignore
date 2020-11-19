@@ -366,3 +366,4 @@ plug-in/PDFMultipleWatermarks/Output/Win2PDF-Apply-Multiple-Watermarks-Plug-In.e
 plug-in/signexe.bat
 plug-in/buildall.bat
 plug-in/PDFArchiveFile/Output/Win2PDF-Archive-File-Plug-In.exe
+plug-in/PDFPrintLogger/Output/Win2PDF-Print-Logger-Plug-In.exe
