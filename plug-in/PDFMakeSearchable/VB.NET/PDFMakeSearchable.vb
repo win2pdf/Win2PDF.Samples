@@ -4,6 +4,8 @@ Imports System.Windows
 Imports Microsoft.Win32
 Imports System.Diagnostics
 
+#Const WAITFOREXIT = False 'set to True to wait for searchable command to complete
+
 
 
 Module PDFMakeSearchable
@@ -38,12 +40,14 @@ Module PDFMakeSearchable
 
                         'execute the deletepages command
                         newProc = Diagnostics.Process.Start(startInfo)
+#If WAITFOREXIT Then
                         newProc.WaitForExit()
                         If newProc.HasExited Then
                             If newProc.ExitCode <> 0 Then
                                 MessageBox.Show(String.Format("Win2PDF command line failed, make sure Win2PDF is licensed: {0} {1}, error code {2}", win2pdfcmdline, arguments, newProc.ExitCode))
                             End If
                         End If
+#End If
                     Else
                         MessageBox.Show(String.Format("Win2PDF is not installed.  Download Win2PDF at https://www.win2pdf.com/download/"))
                     End If

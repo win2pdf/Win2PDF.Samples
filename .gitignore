@@ -369,3 +369,4 @@ plug-in/PDFArchiveFile/Output/Win2PDF-Archive-File-Plug-In.exe
 plug-in/PDFPrintLogger/Output/Win2PDF-Print-Logger-Plug-In.exe
 plug-in/.idea/*
 .idea/*
+plug-in/PDFSendToThunderbird/Output/Win2PDF-Send-To-Thunderbird-Plug-In.exe
