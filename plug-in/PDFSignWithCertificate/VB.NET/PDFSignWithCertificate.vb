@@ -45,7 +45,7 @@ Module PDFSignWithCertificate
                 End If
             End If
 
-            If args.Length = 1 Then 'the only parameter is the PDF file name
+            If args.Length = 1 OrElse args.Length = 2 Then 'the first parameter is the PDF file name. The master password is an optional 2nd parameter.
                 If Path.GetExtension(args(0)).ToUpper = ".PDF" Then 'ignore if not PDF
                     Dim newProc As Diagnostics.Process
                     Dim win2pdfcmdline = Environment.SystemDirectory
@@ -63,11 +63,16 @@ Module PDFSignWithCertificate
                         passDlg.ShowDialog()
 
                         If passDlg.Password.Length > 0 Then
+                            Dim masterpass As String = ""
+
+                            If args.Length = 2 Then
+                                masterpass = args(1)
+                            End If
 
                             'enclose the file names in quotes in case they contain spaces
                             'sign command line documented at: https://www.win2pdf.com/doc/command-line-sign-pdf-with-certificate.html
                             Debug.Assert(File.Exists(certname))
-                            Dim arguments1 As String = String.Format("sign ""{0}"" ""{0}"" ""{1}"" ""{2}""", args(0), certname, passDlg.Password)
+                            Dim arguments1 As String = String.Format("sign ""{0}"" ""{0}"" ""{1}"" ""{2}"" ""{3}""", args(0), certname, passDlg.Password, masterpass)
 
                             Dim startInfo As New ProcessStartInfo(win2pdfcmdline)
                             With startInfo
@@ -97,9 +102,9 @@ Module PDFSignWithCertificate
                         End If
                     Else
                         Windows.Forms.MessageBox.Show(String.Format("Win2PDF Pro is not installed.  Download Win2PDF at https://www.win2pdf.com/download/"))
-                        End If
                     End If
                 End If
+            End If
         Catch ex As Exception
             Dim exception_description = String.Format("Win2PDF plug-in exception {0}, stack {1}, targetsite {2}", ex.Message, ex.StackTrace, ex.TargetSite)
             Windows.Forms.MessageBox.Show(exception_description)
