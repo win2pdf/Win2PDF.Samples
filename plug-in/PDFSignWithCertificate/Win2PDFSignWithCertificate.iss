@@ -41,6 +41,9 @@ Source: "VB.NET\bin\Release\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignorever
 ;configure Win2PDF to use the plug-in
 ;use HKLM to install for all users
 ;use "SOFTWARE\Dane Prairie Systems\PrinterName" to install for a specific printer
+;first delete old non-secure plug-in
+Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; ValueType:none; ValueName: "default post action"; Flags: deletevalue
+;install plug-in using secure option to support signing files with permissions
 Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; ValueType:string; ValueName: "default post action secure"; ValueData: "{app}\{#MyAppExeName} ""%s"" ""%s"""; Flags: uninsdeletevalue
 ;Allow user to turn "Sign With Certificate" on or off in the Win2PDF File Save window. Remove this to always apply.
 Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; ValueType:string; ValueName: "post action checkbox label"; ValueData: "Sign With Certificate"; Flags: uninsdeletevalue
