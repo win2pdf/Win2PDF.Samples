@@ -1,0 +1,37 @@
+# This flow searches the contents of PDF files in the selected folder for the text "Your name :" and "Your address :", and renames the PDF files based on the text immediately following search strings.
+Display.SelectFolder Description: $'''Select Folder to Rename''' IsTopMost: False SelectedFolder=> SelectedFolder ButtonPressed=> ButtonPressed3
+Folder.GetFiles Folder: SelectedFolder FileFilter: $'''*.pdf''' IncludeSubfolders: False FailOnAccessDenied: True SortBy1: Folder.SortBy.NoSort SortDescending1: False SortBy2: Folder.SortBy.NoSort SortDescending2: False SortBy3: Folder.SortBy.NoSort SortDescending3: False Files=> Files
+LOOP FOREACH CurrentItem IN Files
+    SET TxtFile TO $'''%CurrentItem%\'.txt\''''
+    # Convert pdf to text file
+    System.RunDOSCommand DOSCommandOrApplication: $'''C:\\Windows\\System32\\spool\\drivers\\x64\\3\\win2pdfd.exe extracttext \"%CurrentItem%\" \"%TxtFile%\" 0''' StandardOutput=> CommandOutput StandardError=> CommandErrorOutput ExitCode=> CommandExitCode
+    File.ReadText File: TxtFile Encoding: File.TextFileEncoding.UTF8 Content=> FileContents
+    File.Delete Files: TxtFile
+    # Find position of "Your name :"
+    Text.ParseForFirstOccurrence Text: FileContents TextToFind: $'''Your name :''' StartingPosition: 0 IgnoreCase: False OccurrencePosition=> Position
+    # Move "Position" past "Your name :"
+    Variables.IncreaseVariable Value: Position IncrementValue: 12 IncreasedValue=> Position
+    Text.ParseForFirstOccurrence Text: FileContents TextToFind: $'''Your address :''' StartingPosition: Position IgnoreCase: False OccurrencePosition=> PositionEnd
+    SET SubTextLength TO PositionEnd
+    Variables.DecreaseVariable Value: SubTextLength DecrementValue: Position DecreasedValue=> SubTextLength
+    # Find text between "Your name :" and "Your address :"
+    Text.GetSubtext Text: FileContents CharacterPosition: Position NumberOfChars: SubTextLength Subtext=> RenamedFile
+    Text.Trim Text: RenamedFile TrimOption: Text.TrimOption.Both TrimmedText=> RenamedFile
+    SET Position TO PositionEnd
+    Variables.IncreaseVariable Value: Position IncrementValue: 15 IncreasedValue=> Position
+    Text.ParseForFirstOccurrence Text: FileContents TextToFind: $'''Date :''' StartingPosition: Position IgnoreCase: False OccurrencePosition=> PositionEnd
+    Variables.DecreaseVariable Value: PositionEnd DecrementValue: Position DecreasedValue=> PositionEnd
+    Text.GetSubtext Text: FileContents CharacterPosition: Position NumberOfChars: PositionEnd Subtext=> Subtext
+    # Convert address text to lists to join with name and remove line feeds
+    Text.Trim Text: Subtext TrimOption: Text.TrimOption.Both TrimmedText=> TrimmedText
+    Text.Split Text: Subtext StandardDelimiter: Text.StandardDelimiter.NewLine DelimiterTimes: 1 Result=> AddressList
+    Variables.RemoveItemFromListByIndex ItemIndex: 0 List: AddressList NewList=> AddressList
+    Variables.CreateNewList List=> NameList
+    Variables.AddItemToList Item: RenamedFile List: NameList NewList=> NameList
+    Variables.MergeLists FirstList: NameList SecondList: AddressList OutputList=> OutputList
+    Text.JoinWithDelimiter List: OutputList StandardDelimiter: Text.StandardDelimiter.Space DelimiterTimes: 1 Result=> JoinedText
+    Text.Trim Text: JoinedText TrimOption: Text.TrimOption.Both TrimmedText=> JoinedText
+    File.GetPathPart File: CurrentItem RootPath=> RootPath Directory=> Directory FileName=> FileName FileNameWithoutExtension=> FileNameNoExtension Extension=> FileExtension
+    SET RenamedFile TO $'''%Directory%\\%JoinedText%.pdf'''
+    File.Rename Files: CurrentItem NewName: RenamedFile KeepExtension: True IfFileExists: File.IfExists.Overwrite RenamedFiles=> RenamedFiles
+END
