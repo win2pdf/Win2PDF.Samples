@@ -371,3 +371,4 @@ plug-in/.idea/*
 .idea/*
 plug-in/PDFSendToThunderbird/Output/Win2PDF-Send-To-Thunderbird-Plug-In.exe
 plug-in/PDFSignWithCertificate/Output/Win2PDF-Sign-With-Certificate-Plug-In.exe
+plug-in/PDFViewFile/Output/Win2PDF-View-File-Plug-In.exe
