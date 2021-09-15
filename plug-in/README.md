@@ -18,6 +18,8 @@
 
 [Sign PDF With Digital Certificate](/plug-in/PDFSignWithCertificate) - Automatically sign a newly created PDF with a digital certificate
 
+[View File](/plug-in/PDFViewFile) - Automatically view a newly created PDF with the default system PDF viewer.
+
 Plug-ins require that [Win2PDF](https://www.win2pdf.com) is installed.  An evaluation version of Win2PDF can be downloaded for free at https://www.win2pdf.com/download/ 
 
 Please contact support@win2pdf.com with questions, plug-in feature requests, or to request a time limited evaluation license.
