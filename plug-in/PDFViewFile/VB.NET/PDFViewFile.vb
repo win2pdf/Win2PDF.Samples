@@ -12,7 +12,15 @@ Module PDFViewFile
             If args.Length = 1 Then 'the only parameter is the PDF file name
 
                 If File.Exists(args(0)) Then
-                    Process.Start(args(0))
+                    Dim process = New Process With {
+                        .StartInfo = New ProcessStartInfo With {
+                           .FileName = args(0)
+                        }
+                    }
+                    process.Start()
+                    process.WaitForExit()
+                    'delete file after the viewer is closed
+                    File.Delete(args(0))
                 End If
             Else
                 MessageBox.Show("Invalid number of parameters")

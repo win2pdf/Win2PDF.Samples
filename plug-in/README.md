@@ -18,7 +18,7 @@
 
 [Sign PDF With Digital Certificate](/plug-in/PDFSignWithCertificate) - Automatically sign a newly created PDF with a digital certificate
 
-[View File](/plug-in/PDFViewFile) - Automatically view a newly created PDF with the default system PDF viewer.
+[PDF View and Delete File](/plug-in/PDFViewFile) - Automatically view a newly created PDF with the default system PDF viewer, and then delete the file when the viewer is closed.
 
 Plug-ins require that [Win2PDF](https://www.win2pdf.com) is installed.  An evaluation version of Win2PDF can be downloaded for free at https://www.win2pdf.com/download/ 
 
