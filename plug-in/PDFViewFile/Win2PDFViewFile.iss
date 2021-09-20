@@ -42,8 +42,11 @@ Source: "VB.NET\bin\Release\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignorever
 ;configure Win2PDF to use the plug-in
 ;use HKLM to install for all users
 ;use "SOFTWARE\Dane Prairie Systems\PrinterName" to install for a specific printer
-Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; ValueType:string; ValueName: "default post action"; ValueData: "{app}\{#MyAppExeName} ""%s"""; Flags: uninsdeletevalue
-;Allow user to turn "Duplicate File" on or off in the Win2PDF File Save window. Remove this to always apply.
+Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; ValueType:string; ValueName: "default post action nowait"; ValueData: "{app}\{#MyAppExeName} ""%s"""; Flags: uninsdeletevalue
+;remove standard plug-in if it exists
+Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; ValueName: "default post action"; Flags: deletevalue uninsdeletevalue noerror
+Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; ValueName: "post action checkbox label"; Flags: deletevalue uninsdeletevalue noerror
+;Allow user to turn "View and Delete" on or off in the Win2PDF File Save window. Remove this to always apply.
 ;Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; ValueType:string; ValueName: "post action checkbox label"; ValueData: "View and Delete"; Flags: uninsdeletevalue
 
 [Run]
