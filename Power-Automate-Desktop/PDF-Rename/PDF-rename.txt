@@ -1,0 +1,15 @@
+# This flow searches the contents of PDF files in the selected folder for SearchText, and renames the PDF files based on the text immediately following SearchText. Change the SearchText variable to the desired search field. Note : the SearchText field is case sensitive.
+SET SearchText TO $'''INVOICE :'''
+Display.SelectFolder Description: $'''Select Folder to Rename''' IsTopMost: False SelectedFolder=> SelectedFolder ButtonPressed=> ButtonPressed3
+Folder.GetFiles Folder: SelectedFolder FileFilter: $'''*.pdf''' IncludeSubfolders: False FailOnAccessDenied: True SortBy1: Folder.SortBy.NoSort SortDescending1: False SortBy2: Folder.SortBy.NoSort SortDescending2: False SortBy3: Folder.SortBy.NoSort SortDescending3: False Files=> Files
+LOOP FOREACH CurrentItem IN Files
+# Search for %SearchText% field and return following text in CommandOutput using the following Win2PDF command line:
+# C:\Windows\System32\spool\drivers\x64\3\win2pdfd.exe getcontentsearch "%CurrentItem%" "" "%SearchText%"
+Scripting.RunDOSCommand.RunDOSCommand DOSCommandOrApplication: $'''C:\\Windows\\System32\\spool\\drivers\\x64\\3\\win2pdfd.exe getcontentsearch \"%CurrentItem%\" \"\" \"%SearchText%\"''' StandardOutput=> CommandOutput StandardError=> CommandErrorOutput ExitCode=> CommandExitCode
+IF CommandExitCode = 0 THEN
+Text.Trim Text: CommandOutput TrimOption: Text.TrimOption.Both TrimmedText=> TrimmedText
+File.RenameFiles.Rename Files: CurrentItem NewName: $'''%SelectedFolder%\\%TrimmedText%''' KeepExtension: True IfFileExists: File.IfExists.Overwrite RenamedFiles=> RenamedFiles
+ELSE
+Display.ShowMessageDialog.ShowMessageWithTimeout Title: $'''Win2PDF Renamer''' Message: $'''Could not find \"INVOICE :\" field for file %CurrentItem%''' Icon: Display.Icon.None Buttons: Display.Buttons.OK DefaultButton: Display.DefaultButton.Button1 IsTopMost: False Timeout: 10 ButtonPressed=> ButtonPressed4
+END
+END
