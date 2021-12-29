@@ -4,4 +4,4 @@ To use the sample, copy the text and paste it into a new flow in Power Automate 
 
 Contact support@win2pdf.com if you have any questions.
  
-An evaluation version of Win2PDF can be downloaded for free at https://www.win2pdf.com/download/. Please contact support@win2pdf.com with questions or to request a time limited evaluation license.
+An evaluation version of Win2PDF can be downloaded for free at https://www.win2pdf.com/download/. Please contact support@win2pdf.com to request a time limited evaluation license.

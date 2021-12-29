@@ -1,21 +1,18 @@
 # This flow converts a folder of Microsoft Word .DOCX files to PDF using the Win2PDF printer. The PDF files are placed in the same folder as the DOCX files, but with a .PDF extension.
-System.SetDefaultPrinter PrinterName: $'''Win2PDF'''
+Workstation.SetDefaultPrinter PrinterName: $'''Win2PDF'''
 Display.SelectFolder Description: $'''Select folder to convert to PDF''' IsTopMost: False SelectedFolder=> SelectedFolder ButtonPressed=> ButtonPressed
 Folder.GetFiles Folder: SelectedFolder FileFilter: $'''*.docx''' IncludeSubfolders: False FailOnAccessDenied: True SortBy1: Folder.SortBy.NoSort SortDescending1: False SortBy2: Folder.SortBy.NoSort SortDescending2: False SortBy3: Folder.SortBy.NoSort SortDescending3: False Files=> Files
 LOOP FOREACH CurrentItem IN Files
-  # Get the path variables so we can save the file with a .PDF extension
-  File.GetPathPart File: CurrentItem RootPath=> RootPath Directory=> Directory FileName=> FileName FileNameWithoutExtension=> FileNameNoExtension Extension=> FileExtension
-  /# Set the PDF file name to the same name as the .DOCX, but with a .PDF extension
-reg.exe add "HKCU\Software\Dane Prairie Systems\Win2PDF" /v PDFPostFileName /d "%Directory%\%FileNameNoExtension%.pdf" /f#/
-  System.RunDOSCommand DOSCommandOrApplication: $'''reg.exe add \"HKCU\\Software\\Dane Prairie Systems\\Win2PDF\" /v PDFPostFileName /d \"%Directory%\\%FileNameNoExtension%.pdf\" /f''' StandardOutput=> CommandOutput StandardError=> CommandErrorOutput ExitCode=> CommandExitCode
-  # Print to the Win2PDF printer to convert to PDF
-  System.PrintDocument DocumentPath: CurrentItem
-  SET CommandExitCode TO 0
-  # Wait for the Win2PDF printer to finish before printing the next document. 
-  LOOP WHILE (CommandExitCode) = (0)
-    /# The "PDFPostFileName" registry setting will be deleted when the PDF is created. The following reg.exe command will return an error code if the registry setting does not exist.
-reg.exe query "HKCU\Software\Dane Prairie Systems\Win2PDF" /v PDFPostFileName#/
-    System.RunDOSCommand DOSCommandOrApplication: $'''reg.exe query \"HKCU\\Software\\Dane Prairie Systems\\Win2PDF\" /v PDFPostFileName''' StandardOutput=> CommandOutput StandardError=> CommandErrorOutput ExitCode=> CommandExitCode
-    WAIT 0.1 
-  END
+    # Get the path variables so we can save the file with a .PDF extension
+    File.GetPathPart File: CurrentItem RootPath=> RootPath Directory=> Directory FileName=> FileName FileNameWithoutExtension=> FileNameNoExtension Extension=> FileExtension
+    # Set the PDF file name to the same name as the .DOCX, but with a .PDF extension
+    Scripting.RunDOSCommand.RunDOSCommand DOSCommandOrApplication: $'''reg.exe add \"HKCU\\Software\\Dane Prairie Systems\\Win2PDF\" /v PDFPostFileName /d \"%Directory%\\%FileNameNoExtension%.pdf\"''' StandardOutput=> CommandOutput StandardError=> CommandErrorOutput ExitCode=> CommandExitCode
+    # Print to the Win2PDF printer to convert to PDF
+    Workstation.PrintDocument DocumentPath: CurrentItem
+    SET CommandExitCode TO 0
+    LOOP WHILE (CommandExitCode) = (0)
+        # The "PDFPostFileName" registry setting will be deleted when the PDF is created. The following reg.exe command will return an error code if the registry setting does not exist.
+        Scripting.RunDOSCommand.RunDOSCommand DOSCommandOrApplication: $'''reg.exe query \"HKCU\\Software\\Dane Prairie Systems\\Win2PDF\" /v PDFPostFileName''' StandardOutput=> CommandOutput StandardError=> CommandErrorOutput ExitCode=> CommandExitCode
+        WAIT 0.1
+    END
 END
