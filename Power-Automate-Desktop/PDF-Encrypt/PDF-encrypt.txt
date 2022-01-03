@@ -1,0 +1,8 @@
+# This sample demonstrates how to encrypt a folder of PDFs using the Win2PDF encrypt command line with Microsoft Power Automate Desktop.
+Display.SelectFolder Description: $'''Select Folder to Encrypt''' IsTopMost: False SelectedFolder=> SelectedFolder ButtonPressed=> ButtonPressed3
+Folder.GetFiles Folder: SelectedFolder FileFilter: $'''*.pdf''' IncludeSubfolders: False FailOnAccessDenied: True SortBy1: Folder.SortBy.NoSort SortDescending1: False SortBy2: Folder.SortBy.NoSort SortDescending2: False SortBy3: Folder.SortBy.NoSort SortDescending3: False Files=> Files
+LOOP FOREACH CurrentItem IN Files
+    /# Encrypt the PDF file in place  and disable print, copy, and modify permissions using the Win2PDF encrypt command line:
+C:\\Windows\\System32\\spool\\drivers\\x64\\3\\win2pdfd.exe encrypt "%CurrentItem%" "%CurrentItem%" ffffffe0 256aes "master" ""#/
+    Scripting.RunDOSCommand.RunDOSCommand DOSCommandOrApplication: $'''C:\\Windows\\System32\\spool\\drivers\\x64\\3\\win2pdfd.exe encrypt \"%CurrentItem%\" \"%CurrentItem%\" ffffffe0 256aes \"master\" \"\"''' WorkingDirectory: $'''c:\\windows\\system32\\spool\\drivers\\x64\\3\\''' StandardOutput=> CommandOutput StandardError=> CommandErrorOutput ExitCode=> CommandExitCode
+END

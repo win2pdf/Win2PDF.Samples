@@ -1,0 +1,16 @@
+# This Power Automate Desktop flow converts an HTML file to PDF using Microsoft Edge and the Win2PDF printer. This sample requires the Microsoft Power Automate for Edge add-in is installed.
+WebAutomation.LaunchEdge.LaunchEdge Url: $'''https://helpdesk.win2pdf.com''' WindowState: WebAutomation.BrowserWindowState.Normal ClearCache: False ClearCookies: False Timeout: 60 BrowserInstance=> Browser
+File.GetTempPath TempFile=> TempFile
+WebAutomation.TakeScreenshot.TakeScreenshotSaveToFile BrowserInstance: Browser File: TempFile FileFormat: WebAutomation.FileFormat.Png
+/# Convert the PNG to PDF using the Win2PDF Desktop Command Line
+C:\\Windows\\System32\\spool\\drivers\\x64\\3\\win2pdfd png2pdf %TempFile% %TempFile%.pdf#/
+Scripting.RunDOSCommand.RunDOSCommand DOSCommandOrApplication: $'''C:\\Windows\\System32\\spool\\drivers\\x64\\3\\win2pdfd png2pdf %TempFile% %TempFile%.pdf''' StandardOutput=> CommandOutput StandardError=> CommandErrorOutput ExitCode=> CommandExitCode
+/# Make the PDF searchable (optional)
+Requires the Win2PDF Desktop with OCR download
+C:\\Windows\\System32\\spool\\drivers\\x64\\3\\win2pdfd.exe makesearchable %TempFile%.pdf %TempFile%.pdf#/
+Scripting.RunDOSCommand.RunDOSCommand DOSCommandOrApplication: $'''C:\\Windows\\System32\\spool\\drivers\\x64\\3\\win2pdfd.exe makesearchable %TempFile%.pdf %TempFile%.pdf''' StandardOutput=> CommandOutput2 StandardError=> CommandErrorOutput2 ExitCode=> CommandExitCode2
+# Delete the temporary PNG file
+File.Delete Files: TempFile
+WebAutomation.CloseWebBrowser BrowserInstance: Browser
+# Open the PDF using the default viewer
+System.RunApplication.RunApplication ApplicationPath: $'''%TempFile%.pdf''' WindowStyle: System.ProcessWindowStyle.Normal ProcessId=> AppProcessId

@@ -1,0 +1,8 @@
+# This sample demonstrates how to compress a folder of PDFs using the Win2PDF compress command line compress with Microsoft Power Automate Desktop.
+Display.SelectFolder Description: $'''Select Folder to Compress''' IsTopMost: False SelectedFolder=> SelectedFolder ButtonPressed=> ButtonPressed3
+Folder.GetFiles Folder: SelectedFolder FileFilter: $'''*.pdf''' IncludeSubfolders: False FailOnAccessDenied: True SortBy1: Folder.SortBy.NoSort SortDescending1: False SortBy2: Folder.SortBy.NoSort SortDescending2: False SortBy3: Folder.SortBy.NoSort SortDescending3: False Files=> Files
+LOOP FOREACH CurrentItem IN Files
+    /# Compress the PDF file in place using the Win2PDF compress command line:
+C:\\Windows\\System32\\spool\\drivers\\x64\\3\\win2pdfd.exe compress "%CurrentItem%" 50 "%CurrentItem%"#/
+    Scripting.RunDOSCommand.RunDOSCommand DOSCommandOrApplication: $'''C:\\Windows\\System32\\spool\\drivers\\x64\\3\\win2pdfd.exe compress \"%CurrentItem%\" 50 \"%CurrentItem%\"''' WorkingDirectory: $'''c:\\windows\\system32\\spool\\drivers\\x64\\3\\''' StandardOutput=> CommandOutput StandardError=> CommandErrorOutput ExitCode=> CommandExitCode
+END
