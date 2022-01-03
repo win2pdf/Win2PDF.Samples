@@ -1,4 +1,4 @@
-# This flow converts a folder of Microsoft Word .XLSX files to PDF using the Win2PDF printer. The PDF files are placed in the same folder as the .XLSX files, but with a .PDF extension.
+# This flow converts a folder of Microsoft Excel .XLSX files to PDF using the Win2PDF printer. The PDF files are placed in the same folder as the .XLSX files, but with a .PDF extension.
 Workstation.SetDefaultPrinter PrinterName: $'''Win2PDF'''
 Display.SelectFolder Description: $'''Select folder to convert to PDF''' IsTopMost: False SelectedFolder=> SelectedFolder ButtonPressed=> ButtonPressed
 Folder.GetFiles Folder: SelectedFolder FileFilter: $'''*.xlsx''' IncludeSubfolders: False FailOnAccessDenied: True SortBy1: Folder.SortBy.NoSort SortDescending1: False SortBy2: Folder.SortBy.NoSort SortDescending2: False SortBy3: Folder.SortBy.NoSort SortDescending3: False Files=> Files
