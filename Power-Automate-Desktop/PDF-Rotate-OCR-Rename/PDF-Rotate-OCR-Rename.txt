@@ -1,5 +1,6 @@
 # This flow searches the contents of PDF files in the selected folder for SearchText, and renames the PDF files based on the text immediately following SearchText. Change the SearchText variable to the desired search field. Note : the SearchText field is case sensitive.
 SET SearchText TO $'''DOCUMENT No.'''
+SET SearchText2 TO $'''DOCUMENT'''
 Display.SelectFolder Description: $'''Select Folder to Rename''' IsTopMost: False SelectedFolder=> SelectedFolder ButtonPressed=> ButtonPressed3
 Folder.GetFiles Folder: SelectedFolder FileFilter: $'''*.pdf''' IncludeSubfolders: False FailOnAccessDenied: True SortBy1: Folder.SortBy.NoSort SortDescending1: False SortBy2: Folder.SortBy.NoSort SortDescending2: False SortBy3: Folder.SortBy.NoSort SortDescending3: False Files=> Files
 Variables.CreateNewList List=> rotationlist
@@ -10,27 +11,31 @@ Variables.AddItemToList Item: 270 List: rotationlist NewList=> rotationlist
 LOOP FOREACH CurrentItem IN Files
     SET renamed_file TO 0
     SET CurrentItemTemp TO $'''%CurrentItem%-temp.pdf'''
-    System.RunDOSCommand DOSCommandOrApplication: $'''copy %CurrentItem% %CurrentItemTemp%''' WorkingDirectory: SelectedFolder StandardOutput=> CommandOutput3 StandardError=> CommandErrorOutput3 ExitCode=> CommandExitCode3
+    Scripting.RunDOSCommand.RunDOSCommand DOSCommandOrApplication: $'''copy %CurrentItem% %CurrentItemTemp%''' WorkingDirectory: SelectedFolder StandardOutput=> CommandOutput3 StandardError=> CommandErrorOutput3 ExitCode=> CommandExitCode3
     # The pages are in different orientations, but the OCR works best in portrait.  Rotate through each orientation until we find the search field.
     LOOP FOREACH rotation IN rotationlist
         # rotate the PDF
-        System.RunDOSCommand DOSCommandOrApplication: $'''C:\\Windows\\System32\\spool\\drivers\\x64\\3\\win2pdfd.exe rotatepages \"%CurrentItem%\" %rotation% 0 \"%CurrentItemTemp%\"''' StandardOutput=> CommandOutput2 StandardError=> CommandErrorOutput2 ExitCode=> CommandExitCode2
+        Scripting.RunDOSCommand.RunDOSCommand DOSCommandOrApplication: $'''C:\\Windows\\System32\\spool\\drivers\\x64\\3\\win2pdfd.exe rotatepages \"%CurrentItem%\" %rotation% 0 \"%CurrentItemTemp%\"''' StandardOutput=> CommandOutput2 StandardError=> CommandErrorOutput2 ExitCode=> CommandExitCode2
         # Make the PDF searchable
-        System.RunDOSCommand DOSCommandOrApplication: $'''C:\\Windows\\System32\\spool\\drivers\\x64\\3\\win2pdfd.exe makesearchable \"%CurrentItemTemp%\" \"%CurrentItemTemp%\"''' StandardOutput=> CommandOutput2 StandardError=> CommandErrorOutput2 ExitCode=> CommandExitCode2
+        Scripting.RunDOSCommand.RunDOSCommand DOSCommandOrApplication: $'''C:\\Windows\\System32\\spool\\drivers\\x64\\3\\win2pdfd.exe makesearchable \"%CurrentItemTemp%\" \"%CurrentItemTemp%\"''' StandardOutput=> CommandOutput2 StandardError=> CommandErrorOutput2 ExitCode=> CommandExitCode2
         # Search for %SearchText% field and return following text in CommandOutput using the following Win2PDF command line:
-        System.RunDOSCommand DOSCommandOrApplication: $'''C:\\Windows\\System32\\spool\\drivers\\x64\\3\\win2pdfd.exe getcontentsearch \"%CurrentItemTemp%\" \"\" \"%SearchText%\"''' StandardOutput=> CommandOutput StandardError=> CommandErrorOutput ExitCode=> CommandExitCode
-        IF (File.Exists File: CurrentItemTemp) THEN
+        Scripting.RunDOSCommand.RunDOSCommand DOSCommandOrApplication: $'''C:\\Windows\\System32\\spool\\drivers\\x64\\3\\win2pdfd.exe getcontentsearch \"%CurrentItemTemp%\" \"\" \"%SearchText%\"''' StandardOutput=> CommandOutput StandardError=> CommandErrorOutput ExitCode=> CommandExitCode
+        # If SearchText isn't found, try SearchText2
+        IF CommandExitCode <> 0 THEN
+            Scripting.RunDOSCommand.RunDOSCommand DOSCommandOrApplication: $'''C:\\Windows\\System32\\spool\\drivers\\x64\\3\\win2pdfd.exe getcontentsearch \"%CurrentItemTemp%\" \"\" \"%SearchText2%\"''' StandardOutput=> CommandOutput StandardError=> CommandErrorOutput ExitCode=> CommandExitCode
+        END
+        IF (File.IfFile.Exists File: CurrentItemTemp) THEN
             File.Delete Files: CurrentItemTemp
         END
         IF CommandExitCode = 0 THEN
             Text.Trim Text: CommandOutput TrimOption: Text.TrimOption.Both TrimmedText=> TrimmedText
             Text.Replace Text: TrimmedText TextToFind: $'''/''' IsRegEx: False IgnoreCase: False ReplaceWith: $'''-''' ActivateEscapeSequences: False Result=> TrimmedText
-            File.Rename Files: CurrentItem NewName: $'''%SelectedFolder%\\%TrimmedText%''' KeepExtension: True IfFileExists: File.IfExists.Overwrite RenamedFiles=> RenamedFiles
+            File.RenameFiles.Rename Files: CurrentItem NewName: $'''%SelectedFolder%\\%TrimmedText%''' KeepExtension: True IfFileExists: File.IfExists.Overwrite RenamedFiles=> RenamedFiles
             SET renamed_file TO 1
             EXIT LOOP
         END
     END
-    IF renamed_file = 0 THEN
-        Display.ShowMessageWithTimeout Title: $'''Win2PDF Renamer''' Message: $'''Could not find \"ORDER\" field for file %CurrentItem%''' Icon: Display.Icon.None Buttons: Display.Buttons.OK DefaultButton: Display.DefaultButton.Button1 IsTopMost: False Timeout: 10 ButtonPressed=> ButtonPressed4
-    END
+END
+IF renamed_file = 0 THEN
+    Display.ShowMessageDialog.ShowMessageWithTimeout Title: $'''Win2PDF Renamer''' Message: $'''Could not find %SearchText% or %SearchText2% field for file %CurrentItem%''' Icon: Display.Icon.None Buttons: Display.Buttons.OK DefaultButton: Display.DefaultButton.Button1 IsTopMost: False Timeout: 10 ButtonPressed=> ButtonPressed4
 END
