@@ -41,8 +41,8 @@
             this.btnOK = new System.Windows.Forms.Button();
             this.cboRegion = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.rdoCopy = new System.Windows.Forms.RadioButton();
-            this.rdoMove = new System.Windows.Forms.RadioButton();
+            this.cboOperation = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.TableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -180,7 +180,6 @@
             this.cboRegion.Name = "cboRegion";
             this.cboRegion.Size = new System.Drawing.Size(214, 21);
             this.cboRegion.TabIndex = 9;
-            this.cboRegion.Text = "US East (N. Virginia)";
             // 
             // label2
             // 
@@ -191,35 +190,34 @@
             this.label2.TabIndex = 10;
             this.label2.Text = "AWS Region";
             // 
-            // rdoCopy
+            // cboOperation
             // 
-            this.rdoCopy.AutoSize = true;
-            this.rdoCopy.Location = new System.Drawing.Point(24, 13);
-            this.rdoCopy.Name = "rdoCopy";
-            this.rdoCopy.Size = new System.Drawing.Size(187, 17);
-            this.rdoCopy.TabIndex = 11;
-            this.rdoCopy.TabStop = true;
-            this.rdoCopy.Text = "Copy PDF to S3 (leave local copy)";
-            this.rdoCopy.UseVisualStyleBackColor = true;
+            this.cboOperation.FormattingEnabled = true;
+            this.cboOperation.Items.AddRange(new object[] {
+            "Copy PDF to S3 (leave local copy)",
+            "Move PDF to S3 (delete local copy)"});
+            this.cboOperation.Location = new System.Drawing.Point(142, 35);
+            this.cboOperation.Name = "cboOperation";
+            this.cboOperation.Size = new System.Drawing.Size(214, 21);
+            this.cboOperation.TabIndex = 13;
+            this.cboOperation.Text = "Copy PDF to S3 (leave local copy)";
             // 
-            // rdoMove
+            // label3
             // 
-            this.rdoMove.AutoSize = true;
-            this.rdoMove.Location = new System.Drawing.Point(24, 36);
-            this.rdoMove.Name = "rdoMove";
-            this.rdoMove.Size = new System.Drawing.Size(193, 17);
-            this.rdoMove.TabIndex = 12;
-            this.rdoMove.TabStop = true;
-            this.rdoMove.Text = "Move PDF to S3 (delete local copy)";
-            this.rdoMove.UseVisualStyleBackColor = true;
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(21, 38);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(65, 13);
+            this.label3.TabIndex = 14;
+            this.label3.Text = "PDF Upload";
             // 
             // ConfigureS3
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(371, 238);
-            this.Controls.Add(this.rdoMove);
-            this.Controls.Add(this.rdoCopy);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.cboOperation);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.cboRegion);
             this.Controls.Add(this.TableLayoutPanel1);
@@ -256,7 +254,7 @@
         internal System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.ComboBox cboRegion;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.RadioButton rdoCopy;
-        private System.Windows.Forms.RadioButton rdoMove;
+        private System.Windows.Forms.ComboBox cboOperation;
+        private System.Windows.Forms.Label label3;
     }
 }

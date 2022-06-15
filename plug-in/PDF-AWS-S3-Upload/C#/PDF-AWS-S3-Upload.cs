@@ -20,21 +20,10 @@ static class PDFAWSS3Upload
         public bool sendFileToS3(string localFilePath, string bucketName, string subDirectoryInBucket, string fileNameInS3)
         {
             var chain = new CredentialProfileStoreChain();
-#if false
-            AWSCredentials awsCredentials;
-            if (chain.TryGetAWSCredentials(PROFILE_NAME, out awsCredentials))
-            {
-                // create an instance of IAmazonS3 class ,in my case i choose RegionEndpoint.EUWest1
-                IAmazonS3 client = new Amazon.S3.AmazonS3Client(awsCredentials, RegionEndpoint.USEast1);
-
-                //IAmazonS3 client = new Amazon.S3.AmazonS3Client(awsCredentials);
-#else
             CredentialProfile profile;
             if (chain.TryGetProfile(PROFILE_NAME, out profile))
             {
                 IAmazonS3 client = new Amazon.S3.AmazonS3Client(profile.GetAWSCredentials(null), profile.Region);
-
-#endif
 
                 // create a TransferUtility instance passing it the IAmazonS3 created in the first step
                 TransferUtility utility = new TransferUtility(client);
@@ -57,7 +46,7 @@ static class PDFAWSS3Upload
             }
             else
             {
-                MessageBox.Show("Invalid credentials");
+                MessageBox.Show("Invalid AWS credentials");
                 return false;
             }
         }
@@ -97,6 +86,24 @@ static class PDFAWSS3Upload
                             AmazonUploader myUploader = new AmazonUploader();
                             myUploader.sendFileToS3(fileToBackup, myBucketName, s3DirectoryName, s3FileName);
                         }
+                        catch (AmazonS3Exception ex)
+                        {
+                            var exception_description = string.Format("Win2PDF plug-in exception \n\n{0}", ex.Message);
+                            if (ex.Message.Contains("The bucket you are attempting to access must be addressed using the specified endpoint."))
+                            {
+                                exception_description += "\n\nCheck bucket name and region.";
+                            }
+                            else if (ex.Message.Contains("The request signature we calculated does not match the signature you provided."))
+                            {
+                                exception_description += "\n\nCheck the Secret Access ID.";
+                            }
+                            MessageBox.Show(exception_description);
+                            using (EventLog eventLog = new EventLog("Application"))
+                            {
+                                eventLog.Source = "Win2PDF";
+                                eventLog.WriteEntry(exception_description, EventLogEntryType.Error, 101);
+                            }
+                        }
                         catch (Exception ex)
                         {
                             var exception_description = string.Format("Win2PDF plug-in exception {0}, stack {1}, targetsite {2}", ex.Message, ex.StackTrace, ex.TargetSite);
@@ -110,15 +117,14 @@ static class PDFAWSS3Upload
                         finally
                         {
                             String operation = Interaction.GetSetting(WIN2PDF_COMPANY, WIN2PDF_PRODUCT, WIN2PDF_UPLOAD_OPERATION, "copy");
-                            if (operation != "copy")
+                            if (operation == "move")
                             {
                                 File.Delete(args[0]);
                             }
                         }
                     }
                     else
-                    {
-                        
+                    {                        
                         MessageBox.Show("Bucket Name cannot be empty.");
                     }
                 }
