@@ -7,9 +7,10 @@ using Microsoft.VisualBasic;
 
 static class PDFViewFile
 {
+    const int ERROR_SHARING_VIOLATION = 32;
 
     [STAThreadAttribute]
-    public void Main(string[] args)
+    public static void Main(string[] args)
     {
         try
         {
