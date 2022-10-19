@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{632A535E-44A1-4293-9845-6F0966BFA311}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>PDF.AWSS3Upload</RootNamespace>
-    <AssemblyName>PDF-AWS-S3-Upload</AssemblyName>
+    <RootNamespace>PDFAppendFile</RootNamespace>
+    <AssemblyName>PDFAppendFile</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -33,53 +33,23 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>PDFAWSS3Upload</StartupObject>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>win2pdf.ico</ApplicationIcon>
+    <StartupObject>PDFAppendFile</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AWSSDK.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
-      <HintPath>packages\AWSSDK.Core.3.7.11.15\lib\net45\AWSSDK.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="AWSSDK.S3, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
-      <HintPath>packages\AWSSDK.S3.3.7.9.15\lib\net45\AWSSDK.S3.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConfigureS3.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ConfigureS3.Designer.cs">
-      <DependentUpon>ConfigureS3.cs</DependentUpon>
-    </Compile>
-    <Compile Include="PDF-AWS-S3-Upload.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="packages\AWSSDK.S3.3.7.9.15\analyzers\dotnet\cs\AWSSDK.S3.CodeAnalysis.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="ConfigureS3.resx">
-      <DependentUpon>ConfigureS3.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="win2pdf.ico" />
+    <Compile Include="PDFAppendFile.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

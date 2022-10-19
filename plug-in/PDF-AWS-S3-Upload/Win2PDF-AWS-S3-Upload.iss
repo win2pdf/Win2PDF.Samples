@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Win2PDF S3 Upload PDF Plug-In"
-#define MyAppVersion "1.03"
+#define MyAppVersion "1.04"
 #define MyAppPublisher "Dane Prairie Systems, LLC"
 #define MyAppURL "https://www.win2pdf.com"
 #define MyAppExeName "PDF-AWS-S3-Upload.exe"
@@ -21,7 +21,7 @@ AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\Win2PDF\Plug-Ins
 DisableDirPage=yes
-DefaultGroupName={#MyAppName}
+DefaultGroupName=Win2PDF
 DisableProgramGroupPage=yes
 ; Remove the following line to run in administrative install mode (install for all users.)
 PrivilegesRequired=lowest
@@ -30,6 +30,7 @@ Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
 SetupLogging=yes
+SignedUninstaller=yes
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -55,7 +56,7 @@ Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; Val
 Filename: "{app}\{#MyAppExeName}"; WorkingDir: "{app}"; Description: "Configure Win2PDF S3 Upload"; 
 
 [Icons]
-Name: "{group}\Configure Win2PDF S3 Upload"; Filename: "{app}\{#MyAppExeName}"; WorkingDir: "{app}"
+Name: "{group}\Configure Win2PDF S3 Upload"; Filename: "{app}\{#MyAppExeName}"; WorkingDir: "{app}"; 
 
 #include "..\win2pdf-setup-code.iss"
 

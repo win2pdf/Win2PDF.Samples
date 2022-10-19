@@ -12,6 +12,8 @@
 
 [PDF Split Pages](/plug-in/PDFSplitPages) - Automatically splits a multi-page PDF into separate one page PDFs
 
+[PDF Append File](/plug-in/PDFAppendFile) - Automatically appends the configured PDF file to newly created PDFs
+
 [PDF Apply Multiple Watermarks](/plug-in/PDFMultipleWatermarks) - Automatically apply different watermarks to separate sections of a PDF
 
 [PDF Image Only Flattener](/plug-in/PDFImageOnlyFlatten) - Automatically merge watermark layers into a single layer Image Only PDF
@@ -19,6 +21,8 @@
 [Sign PDF With Digital Certificate](/plug-in/PDFSignWithCertificate) - Automatically sign a newly created PDF with a digital certificate
 
 [PDF View and Delete File](/plug-in/PDFViewFile) - Automatically view a newly created PDF with the default system PDF viewer, and then delete the file when the viewer is closed.
+
+[PDF AWS PDF Upload](/plug-in/PDF-AWS-S3-Upload) - Automatically upload newly created PDF files created by Win2PDF to Amazon Web Services S3 cloud storage. 
 
 Plug-ins require that [Win2PDF](https://www.win2pdf.com) is installed.  An evaluation version of Win2PDF can be downloaded for free at https://www.win2pdf.com/download/ 
 
