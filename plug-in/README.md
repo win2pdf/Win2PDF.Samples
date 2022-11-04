@@ -20,7 +20,9 @@
 
 [Sign PDF With Digital Certificate](/plug-in/PDFSignWithCertificate) - Automatically sign a newly created PDF with a digital certificate
 
-[PDF View and Delete File](/plug-in/PDFViewFile) - Automatically view a newly created PDF with the default system PDF viewer, and then delete the file when the viewer is closed.
+[PDF View File](/plug-in/PDFViewFile) - Automatically view a newly created PDF with the default system PDF viewer.
+
+[PDF View and Delete File](/plug-in/PDFViewFileAndDelete) - Automatically view a newly created PDF with the default system PDF viewer, and then delete the file when the viewer is closed.
 
 [PDF AWS PDF Upload](/plug-in/PDF-AWS-S3-Upload) - Automatically upload newly created PDF files created by Win2PDF to Amazon Web Services S3 cloud storage. 
 
