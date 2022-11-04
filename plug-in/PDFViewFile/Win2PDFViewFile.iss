@@ -47,7 +47,7 @@ Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; Val
 Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; ValueName: "default post action"; Flags: deletevalue uninsdeletevalue noerror
 ;Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; ValueName: "post action checkbox label"; Flags: deletevalue uninsdeletevalue noerror
 ;Allow user to turn "View and Delete" on or off in the Win2PDF File Save window. Remove this to always apply.
-Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; ValueType:string; ValueName: "post action checkbox label"; ValueData: "View and Delete"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; ValueType:string; ValueName: "post action checkbox label"; ValueData: "Always View"; Flags: uninsdeletevalue
 
 [Run]
 
