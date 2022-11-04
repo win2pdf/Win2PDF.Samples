@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Win2PDF View File Plug-In"
-#define MyAppVersion "1.03"
+#define MyAppVersion "1.05"
 #define MyAppPublisher "Dane Prairie Systems, LLC"
 #define MyAppURL "https://www.win2pdf.com"
 #define MyAppExeName "PDFViewFile.exe"
@@ -45,9 +45,9 @@ Source: "VB.NET\bin\Release\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignorever
 Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; ValueType:string; ValueName: "default post action nowait"; ValueData: "{app}\{#MyAppExeName} ""%s"""; Flags: uninsdeletevalue
 ;remove standard plug-in if it exists
 Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; ValueName: "default post action"; Flags: deletevalue uninsdeletevalue noerror
-;Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; ValueName: "post action checkbox label"; Flags: deletevalue uninsdeletevalue noerror
-;Allow user to turn "View and Delete" on or off in the Win2PDF File Save window. Remove this to always apply.
-Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; ValueType:string; ValueName: "post action checkbox label"; ValueData: "Always View"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; ValueName: "post action checkbox label"; Flags: deletevalue uninsdeletevalue noerror
+;Allow user to turn "Always View" on or off in the Win2PDF File Save window. Remove this to always apply.
+;Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; ValueType:string; ValueName: "post action checkbox label"; ValueData: "Always View"; Flags: uninsdeletevalue
 
 [Run]
 
