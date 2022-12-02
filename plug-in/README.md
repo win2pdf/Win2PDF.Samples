@@ -24,6 +24,8 @@
 
 [PDF View and Delete File](/plug-in/PDFViewFileAndDelete) - Automatically view a newly created PDF with the default system PDF viewer, and then delete the file when the viewer is closed.
 
+[PDF Direct Print](/plug-in/PDFDirectPrint) - Automatically print a newly created PDF to a printer that supports Direct PDF printing.
+
 [PDF AWS PDF Upload](/plug-in/PDF-AWS-S3-Upload) - Automatically upload newly created PDF files created by Win2PDF to Amazon Web Services S3 cloud storage. 
 
 Plug-ins require that [Win2PDF](https://www.win2pdf.com) is installed.  An evaluation version of Win2PDF can be downloaded for free at https://www.win2pdf.com/download/ 

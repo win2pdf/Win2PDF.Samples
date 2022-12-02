@@ -375,3 +375,4 @@ plug-in/PDFViewFile/Output/*
 plug-in/PDF-AWS-S3-Upload/Output/*
 plug-in/PDFAppendFile/Output/*
 plug-in/PDFViewFileAndDelete/Output/*
+plug-in/PDFDirectPrint/Output/*

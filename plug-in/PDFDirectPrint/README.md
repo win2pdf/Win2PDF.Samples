@@ -4,6 +4,6 @@ This sample shows how to create a Win2PDF plug-in to automatically print a newly
 
 This plug-in requires Win2PDF 10.0.142.1 or above.
 
-You can download the compiled version at: https://get.win2pdf.com/plug-in/Win2PDF-Direct-PDF-Print.exe
+You can download the compiled version at: https://get.win2pdf.com/plug-in/Win2PDF-Direct-Print-Plug-In.exe
 
 The Win2PDFDirectPrint.iss [Inno Setup](https://jrsoftware.org/isinfo.php) script creates a setup program that can be used to install the plug-in.
