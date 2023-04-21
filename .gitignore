@@ -376,3 +376,4 @@ plug-in/PDF-AWS-S3-Upload/Output/*
 plug-in/PDFAppendFile/Output/*
 plug-in/PDFViewFileAndDelete/Output/*
 plug-in/PDFDirectPrint/Output/*
+plug-in/PDF2PNG/Output/Win2PDF-PDF2PNG-Plug-In.exe

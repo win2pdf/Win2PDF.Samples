@@ -28,6 +28,8 @@
 
 [PDF AWS PDF Upload](/plug-in/PDF-AWS-S3-Upload) - Automatically upload newly created PDF files created by Win2PDF to Amazon Web Services S3 cloud storage. 
 
+[PDF2PNG](/plug-in/PDF2PNG) - Automatically convert newly created PDF files created by Win2PDF to PNG format with a configurable resolution. 
+
 Plug-ins require that [Win2PDF](https://www.win2pdf.com) is installed.  An evaluation version of Win2PDF can be downloaded for free at https://www.win2pdf.com/download/ 
 
 Please contact support@win2pdf.com with questions, plug-in feature requests, or to request a time limited evaluation license.
