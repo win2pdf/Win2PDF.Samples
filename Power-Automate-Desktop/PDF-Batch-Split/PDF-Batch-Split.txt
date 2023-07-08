@@ -1,0 +1,14 @@
+/# Batch Split PDFs
+This Power Automate Desktop flow splits a folder of PDFs into individual pages, and places the split PDFs in a separate destination folder.#/
+Display.SelectFolder Description: $'''Select Source Folder''' IsTopMost: False SelectedFolder=> SourceFolder ButtonPressed=> ButtonPressed2
+Display.SelectFolder Description: $'''Select Destination Folder for split PDFs''' IsTopMost: False SelectedFolder=> DestFolder ButtonPressed=> ButtonPressed2
+IF SourceFolder = DestFolder THEN
+    Display.ShowMessageDialog.ShowMessage Title: $'''Win2PDF Batch Split''' Message: $'''The source and destination folders must be different.''' Icon: Display.Icon.ErrorIcon Buttons: Display.Buttons.OK DefaultButton: Display.DefaultButton.Button1 IsTopMost: False ButtonPressed=> ButtonPressed
+ELSE
+    # Make sure destination folder is empty
+    Folder.GetFiles Folder: SourceFolder FileFilter: $'''*.pdf''' IncludeSubfolders: False FailOnAccessDenied: True SortBy1: Folder.SortBy.NoSort SortDescending1: False SortBy2: Folder.SortBy.NoSort SortDescending2: False SortBy3: Folder.SortBy.NoSort SortDescending3: False Files=> Files
+    LOOP FOREACH CurrentItem IN Files
+        # Split Pages using Win2PDF Command Line
+        Scripting.RunDOSCommand.RunDOSCommand DOSCommandOrApplication: $'''C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\x64\\\\3\\\\win2pdfd.exe splitpages \"%CurrentItem%\" \"%DestFolder%\" 1 0''' StandardOutput=> CommandOutput StandardError=> CommandErrorOutput ExitCode=> CommandExitCode
+    END
+END
