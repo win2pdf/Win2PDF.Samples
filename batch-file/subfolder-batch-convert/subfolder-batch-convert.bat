@@ -17,6 +17,7 @@ goto :init
     echo    pdf
     echo    jpg
     echo    tiff
+    echo    tiffgray
     echo    png
     echo    docx
     echo    rtf
@@ -62,6 +63,7 @@ rem    echo.  /e, --verbose        shows detailed output
     set "sourcefolder="
     set "destfolder="
     set "convert_format="
+    set "dest_extension="
 
 :parse
     if "%~1"=="" goto :validate
@@ -100,11 +102,15 @@ rem    echo.  /e, --verbose        shows detailed output
     echo destfolder: "%destfolder%"
     echo convert format: %convert_format%
 
+    set "dest_extension=%convert_format%"
+    if "%convert_format%"=="tiffgray" set dest_extension=tif
+    if "%convert_format%"=="tiff" set dest_extension=tif
+
     rem first make folder structure
     for /r "%sourcefolder%" %%i in (*.*) do mkdir "%destfolder%%%~pi" 2> nul
     rem convert all files
     @echo on
-    for /r "%sourcefolder%" %%i in (*.doc *.docx *.PDF *.RTF *.ODT *.TXT *.HTML *.SVG *.XPS *.JPG *.TIF *.PNG *.BMP *.GIF) do win2pdfd.exe convertto "%%i" "%destfolder%%%~pi%%~ni.%convert_format%" %convert_format%
+    for /r "%sourcefolder%" %%i in (*.doc *.docx *.PDF *.RTF *.ODT *.TXT *.HTML *.SVG *.XPS *.JPG *.TIF *.PNG *.BMP *.GIF) do win2pdfd.exe convertto "%%i" "%destfolder%%%~pi%%~ni.%dest_extension%" %convert_format%
     @echo off
     
 
@@ -129,5 +135,7 @@ rem    echo.  /e, --verbose        shows detailed output
 
     set "sourcefolder="
     set "destfolder="
+    set "convert_format="
+    set "dest_extension="
 
     goto :eof
