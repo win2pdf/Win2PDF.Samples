@@ -116,7 +116,7 @@ rem    echo.  /e, --verbose        shows detailed output
     echo convert format: %convert_format%
 
     rem first make folder structure
-    for /r "%sourcefolder%" %%i in (.) do mkdir "%destfolder%%%~pi%" 2> nul
+    for /r "%sourcefolder%" %%i in (*.*) do mkdir "%destfolder%%%~pi" 2> nul
     rem convert all files
     @echo on
     for /r "%sourcefolder%" %%i in (*.doc *.docx *.PDF *.RTF *.ODT *.TXT *.HTML *.SVG *.XPS *.JPG *.TIF *.PNG *.BMP *.GIF) do win2pdfd.exe convertto "%%i" "%destfolder%%%~pi%%~ni%%~xi" %convert_format%
