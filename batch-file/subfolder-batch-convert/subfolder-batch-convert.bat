@@ -15,25 +15,9 @@ goto :init
     echo .
     echo where destformat can be:
     echo    pdf
-    echo    pdfimagemono
-    echo    pdfimagegrayscale
-    echo    pdfimagecolor
-    echo    pdfcompressed
-    echo    pdfsearchable
-    echo    textformatted
-    echo    textunformatted
-    echo    jpggray
     echo    jpg
-    echo    tiffmono
-    echo    tiffgray
     echo    tiff
-    echo    tifftransparent
-    echo    pnggray
     echo    png
-    echo    pnggraytransparent
-    echo    pngtransparent
-    echo    ocrtextformatted
-    echo    ocrtextunformatted
     echo    docx
     echo    rtf
     echo    odt
@@ -41,6 +25,7 @@ goto :init
     echo .
     echo see https://www.win2pdf.com/doc/command-line-convert-to-format.html for more information
     echo.
+    echo the optional [flags] can be one of:
     echo.  /?, --help           shows this help
     echo.  /v, --version        shows the version
 rem    echo.  /e, --verbose        shows detailed output
@@ -119,7 +104,7 @@ rem    echo.  /e, --verbose        shows detailed output
     for /r "%sourcefolder%" %%i in (*.*) do mkdir "%destfolder%%%~pi" 2> nul
     rem convert all files
     @echo on
-    for /r "%sourcefolder%" %%i in (*.doc *.docx *.PDF *.RTF *.ODT *.TXT *.HTML *.SVG *.XPS *.JPG *.TIF *.PNG *.BMP *.GIF) do win2pdfd.exe convertto "%%i" "%destfolder%%%~pi%%~ni%%~xi" %convert_format%
+    for /r "%sourcefolder%" %%i in (*.doc *.docx *.PDF *.RTF *.ODT *.TXT *.HTML *.SVG *.XPS *.JPG *.TIF *.PNG *.BMP *.GIF) do win2pdfd.exe convertto "%%i" "%destfolder%%%~pi%%~ni.%convert_format%" %convert_format%
     @echo off
     
 
