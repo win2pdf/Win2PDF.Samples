@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Win2PDF Image Only Flattener Plug-In"
-#define MyAppVersion "1.0"
+#define MyAppVersion "1.0.1"
 #define MyAppPublisher "Dane Prairie Systems, LLC"
 #define MyAppURL "https://www.win2pdf.com"
 #define MyAppExeName "PDFImageOnlyFlatten.exe"

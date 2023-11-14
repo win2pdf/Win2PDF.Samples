@@ -14,9 +14,7 @@ Module PDFImageOnlyFlatten
         Try
 
             If args.Length = 1 Then 'the only parameter is the PDF file name
-                Dim newfile As String = Path.GetDirectoryName(args(0)) + "\" + WIN2PDF_FLATTEN_TEMPFILE
-                If Not args(0).ToString.Equals(newfile) _ 'skip recursive call from printpdf command line
-                    AndAlso Path.GetExtension(args(0)).ToUpper = ".PDF" Then 'ignore if not PDF
+                If Path.GetExtension(args(0)).ToUpper = ".PDF" Then 'ignore if not PDF
                     Dim newProc As Diagnostics.Process
                     Dim win2pdfcmdline = Environment.SystemDirectory
 
@@ -28,17 +26,12 @@ Module PDFImageOnlyFlatten
                     End If
 
                     If File.Exists(win2pdfcmdline) Then
-                        'copy original PDF file to temporary name, and use original PDF file as destination
-                        If File.Exists(newfile) Then
-                            File.Delete(newfile)
-                        End If
-                        File.Move(args(0), newfile)
 
-                        'enclose the file names in quotes in case they contain spaces, 
-                        'use ".pdfc" as destination to force "PDF Image Only (color)"
-                        'change destination to ".pdfi" to force "PDF Image Only (monochrome)"
-                        'use "Win2Image" printer so the plug-in isn't called recursively
-                        Dim arguments As String = String.Format("printpdf ""{0}"" ""{1}"" ""{2}""", newfile, "Win2Image", args(0) + "c")
+                        'Use the Win2PDF command line "imagepdf" command: https://www.win2pdf.com/doc/command-line-pdf-image-only.html
+                        '  win2pdfd.exe imagepdf "sourcefile" "destfile" colormode
+                        'This example uses "color" for the colormode, but you can change to "mono" or "grayscale"
+                        'Enclose the file names in quotes in case they contain spaces.
+                        Dim arguments As String = String.Format("imagepdf ""{0}"" ""{1}"" color", args(0), args(0))
 
                         Dim startInfo As New ProcessStartInfo(win2pdfcmdline)
                         With startInfo
@@ -50,11 +43,6 @@ Module PDFImageOnlyFlatten
                         newProc = Diagnostics.Process.Start(startInfo)
                         newProc.WaitForExit()
                         If newProc.HasExited Then
-                            'delete temp file
-                            If File.Exists(newfile) Then
-                                File.Delete(newfile)
-                            End If
-
                             If newProc.ExitCode <> 0 Then
                                 MessageBox.Show(String.Format("Win2PDF command line failed: {0} {1}, error code {2}", win2pdfcmdline, arguments, newProc.ExitCode))
                             End If
