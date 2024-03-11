@@ -26,9 +26,13 @@
 
 [PDF Direct Print](/plug-in/PDFDirectPrint) - Automatically print a newly created PDF to a printer that supports Direct PDF printing.
 
+[PDF Print Actual Size](/plug-in/PDFPrintActualSize) - Automatically print a newly created PDF to a printer with no scaling.
+
 [PDF AWS PDF Upload](/plug-in/PDF-AWS-S3-Upload) - Automatically upload newly created PDF files created by Win2PDF to Amazon Web Services S3 cloud storage. 
 
 [PDF2PNG](/plug-in/PDF2PNG) - Automatically convert newly created PDF files created by Win2PDF to PNG format with a configurable resolution. 
+
+[PDF Reformat As Text](/plug-in/PDFReformatAsText) - Automatically reformat newly created PDF files created by Win2PDF using a fixed width font.
 
 Plug-ins require that [Win2PDF](https://www.win2pdf.com) is installed.  An evaluation version of Win2PDF can be downloaded for free at https://www.win2pdf.com/download/ 
 
