@@ -6,4 +6,4 @@ You can download the compiled version at: https://get.win2pdf.com/plug-in/Win2PD
 
 The Win2PDFReformatAsText.iss [Inno Setup](https://jrsoftware.org/isinfo.php) script creates a setup program that can be used to install the plug-in.  The sample does not allow a user to turn off the duplicate file plug-in.
 
-The plug-in requries that [Win2PDF](https://www.win2pdf.com/download/download.htm) is installed. Contact support@win2pdf.com for a time limited evaluation license.
+This plug-in uses the [Win2PDF command line](https://www.win2pdf.com/doc/win2pdf-desktop-command-line.html) to [convert formatted text to pdf](https://www.win2pdf.com/doc/command-line-txt-to-pdf.html), and requires a licensed version of Win2PDF Pro.  Contact support@win2pdf.com for a time limited evaluation license.
