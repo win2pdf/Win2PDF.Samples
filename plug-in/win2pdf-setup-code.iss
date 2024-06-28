@@ -3,7 +3,11 @@
 function GetWin2PDFFile: String;
 begin
 
-  if isWin64() Then
+  if isARM64() Then
+  begin
+     Result := ExpandConstant('{sys}\spool\drivers\arm64\3');
+  end
+  else if isx64OS() Then
   begin
      Result := ExpandConstant('{sys}\spool\drivers\x64\3');
   end

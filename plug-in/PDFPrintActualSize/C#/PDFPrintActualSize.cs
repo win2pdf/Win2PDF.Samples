@@ -55,10 +55,18 @@ static class PDFPrintActualSize
                 var win2pdfcmdline = Environment.SystemDirectory;
 
                 // get the path to the Win2PDF command line executable
-                if (Environment.Is64BitOperatingSystem)
+                if (System.Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE", EnvironmentVariableTarget.Machine) == "ARM64")
+                {
+                    win2pdfcmdline += @"\spool\drivers\arm64\3\win2pdfd.exe";
+                }
+                else if (Environment.Is64BitOperatingSystem)
+                {
                     win2pdfcmdline += @"\spool\drivers\x64\3\win2pdfd.exe";
+                }
                 else
+                {
                     win2pdfcmdline += @"\spool\drivers\w32x86\3\win2pdfd.exe";
+                }
 
                 if (File.Exists(win2pdfcmdline))
                 {

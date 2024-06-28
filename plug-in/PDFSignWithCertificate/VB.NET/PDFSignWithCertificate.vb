@@ -51,7 +51,9 @@ Module PDFSignWithCertificate
                     Dim win2pdfcmdline = Environment.SystemDirectory
 
                     'get the path to the Win2PDF command line executable
-                    If Environment.Is64BitOperatingSystem Then
+                    If System.Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE", EnvironmentVariableTarget.Machine) = "ARM64" Then
+                        win2pdfcmdline += "\spool\drivers\arm64\3\win2pdfd.exe"
+                    ElseIf Environment.Is64BitOperatingSystem Then
                         win2pdfcmdline += "\spool\drivers\x64\3\win2pdfd.exe"
                     Else
                         win2pdfcmdline += "\spool\drivers\w32x86\3\win2pdfd.exe"
