@@ -1,5 +1,6 @@
 ﻿Imports System
 Imports System.IO
+Imports System.Threading
 Imports System.Windows
 Imports System.Windows.Forms
 
@@ -19,6 +20,8 @@ Module PDFReformatAsText
     Public Const ERROR_BAD_FORMAT As Integer = 11
     Public Const ERROR_INVALID_PARAMETER As Integer = 87
     Public Const ERROR_SUCCESS = 0
+
+    Dim mut As Mutex = New Mutex(False, APPNAME)
 
     Function LaunchProcess(win2pdfcmdline As String, arguments1 As String) As Boolean
         Dim newProc As System.Diagnostics.Process
@@ -48,7 +51,13 @@ Module PDFReformatAsText
     End Function
 
     Sub Main(ByVal args() As String)
+
         Try
+            'only allow on instance of the plug-in to run at a time to prevent recursion in formattedtxt2pdf
+            If (Not mut.WaitOne(1000, False)) Then
+                Return
+            End If
+
             If args.Length = 0 Then 'configure the formattedtxt2pdf parameters
                 Dim papersize As String = Interaction.GetSetting(WIN2PDF_COMPANY, WIN2PDF_PRODUCT, PAPERSIZE_SETTING, "letter")
                 papersize = InputBox("Enter paper size", APPNAME, papersize)
@@ -104,6 +113,8 @@ Module PDFReformatAsText
                 eventLog.Source = "Win2PDF"
                 eventLog.WriteEntry(exception_description, EventLogEntryType.Error, 101)
             End Using
+        Finally
+            mut.ReleaseMutex()
         End Try
     End Sub
 
