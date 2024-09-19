@@ -379,3 +379,4 @@ plug-in/PDFDirectPrint/Output/*
 plug-in/PDF2PNG/Output/Win2PDF-PDF2PNG-Plug-In.exe
 plug-in/PDFPrintActualSize/Output/Win2PDF-Print-Actual-Size.exe
 /plug-in/PDFReformatAsText/Output
+/plug-in/PDF2JPG/Output
