@@ -24,6 +24,8 @@
 
 [PDF View and Delete File](/plug-in/PDFViewFileAndDelete) - Automatically view a newly created PDF with the default system PDF viewer, and then delete the file when the viewer is closed.
 
+[PDF Open Folder](/plug-in/PDFOpenFolder) - Automatically open the PDF file save location folder after creating a file with Win2PDF.
+
 [PDF Direct Print](/plug-in/PDFDirectPrint) - Automatically print a newly created PDF to a printer that supports Direct PDF printing.
 
 [PDF Print Actual Size](/plug-in/PDFPrintActualSize) - Automatically print a newly created PDF to a printer with no scaling.
@@ -31,6 +33,8 @@
 [PDF AWS PDF Upload](/plug-in/PDF-AWS-S3-Upload) - Automatically upload newly created PDF files created by Win2PDF to Amazon Web Services S3 cloud storage. 
 
 [PDF2PNG](/plug-in/PDF2PNG) - Automatically convert newly created PDF files created by Win2PDF to PNG format with a configurable resolution. 
+
+[PDF2JPG](/plug-in/PDF2JPG) - Automatically convert newly created PDF files created by Win2PDF to JPG format with a configurable resolution. 
 
 [PDF Reformat As Text](/plug-in/PDFReformatAsText) - Automatically reformat newly created PDF files created by Win2PDF using a fixed width font.
 
