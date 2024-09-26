@@ -45,7 +45,7 @@ Module PDFSendToThunderbird
 
             If args.Length = 1 Then 'the only parameter is the PDF file name
                 If Path.GetExtension(args(0)).ToUpper = ".PDF" Then 'ignore if not PDF
-                    Dim newProc As Diagnostics.Process
+                    Dim newProc As System.Diagnostics.Process
 
                     If File.Exists(thunderbird) Then
 
@@ -59,7 +59,7 @@ Module PDFSendToThunderbird
                         End With
 
                         'execute the watermark command line for the first page
-                        newProc = Diagnostics.Process.Start(startInfo)
+                        newProc = System.Diagnostics.Process.Start(startInfo)
                         newProc.WaitForExit()
                         If newProc.HasExited Then
                             If newProc.ExitCode <> 0 Then
