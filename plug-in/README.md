@@ -36,6 +36,8 @@
 
 [PDF2JPG](/plug-in/PDF2JPG) - Automatically convert newly created PDF files created by Win2PDF to JPG format with a configurable resolution. 
 
+[PDF2TIFF](/plug-in/PDF2TIFF) - Automatically convert newly created PDF files created by Win2PDF to monochrome TIFF format with a configurable resolution. 
+
 [PDF Reformat As Text](/plug-in/PDFReformatAsText) - Automatically reformat newly created PDF files created by Win2PDF using a fixed width font.
 
 Plug-ins require that [Win2PDF](https://www.win2pdf.com) is installed.  An evaluation version of Win2PDF can be downloaded for free at https://www.win2pdf.com/download/ 
