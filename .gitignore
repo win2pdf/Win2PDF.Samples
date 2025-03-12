@@ -382,3 +382,4 @@ plug-in/PDFPrintActualSize/Output/Win2PDF-Print-Actual-Size.exe
 /plug-in/PDF2JPG/Output
 plug-in/PDFOpenFolder/Output/Win2PDF-Open-Folder-Plug-In.exe
 plug-in/PDF2TIFF/Output/Win2PDF-PDF2TIFF-Plug-In.exe
+plug-in/PDFConditionalRename/Output/Win2PDF-Conditional-Rename-Plug-In.exe

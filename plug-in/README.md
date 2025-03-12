@@ -40,6 +40,8 @@
 
 [PDF Reformat As Text](/plug-in/PDFReformatAsText) - Automatically reformat newly created PDF files created by Win2PDF using a fixed width font.
 
+[PDF Conditionally Rename Based on Content](plug-in/PDFConditionalRename) - Conditionally rename a PDF based on the content of the PDF and conditional searches.
+
 Plug-ins require that [Win2PDF](https://www.win2pdf.com) is installed.  An evaluation version of Win2PDF can be downloaded for free at https://www.win2pdf.com/download/ 
 
 Please contact support@win2pdf.com with questions, plug-in feature requests, or to request a time limited evaluation license.
