@@ -22,7 +22,16 @@ public class PDFConditionalRename
 
             if (!string.IsNullOrEmpty(newFilename))
             {
-                string outputPdf = Path.Combine(Path.GetDirectoryName(inputPdf), newFilename + ".pdf");
+                string directory = Path.GetDirectoryName(inputPdf);
+                string outputPdf = Path.Combine(directory, newFilename + ".pdf");
+                int count = 1;
+
+                while (File.Exists(outputPdf))
+                {
+                    outputPdf = Path.Combine(directory, $"{newFilename} ({count}).pdf");
+                    count++;
+                }
+
                 File.Move(inputPdf, outputPdf);
                 Console.WriteLine($"Renamed PDF to: {outputPdf}");
             }
