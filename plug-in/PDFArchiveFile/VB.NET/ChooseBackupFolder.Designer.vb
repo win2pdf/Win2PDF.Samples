@@ -32,34 +32,38 @@ Partial Class ChooseBackupFolder
         '
         'btnBrowseFolder
         '
-        Me.btnBrowseFolder.Location = New System.Drawing.Point(437, 45)
+        Me.btnBrowseFolder.Location = New System.Drawing.Point(291, 41)
+        Me.btnBrowseFolder.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.btnBrowseFolder.Name = "btnBrowseFolder"
-        Me.btnBrowseFolder.Size = New System.Drawing.Size(105, 34)
+        Me.btnBrowseFolder.Size = New System.Drawing.Size(70, 22)
         Me.btnBrowseFolder.TabIndex = 0
         Me.btnBrowseFolder.Text = "Browse"
         Me.btnBrowseFolder.UseVisualStyleBackColor = True
         '
         'txtBackupFolder
         '
-        Me.txtBackupFolder.Location = New System.Drawing.Point(12, 49)
+        Me.txtBackupFolder.Location = New System.Drawing.Point(8, 43)
+        Me.txtBackupFolder.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.txtBackupFolder.Name = "txtBackupFolder"
-        Me.txtBackupFolder.Size = New System.Drawing.Size(397, 26)
+        Me.txtBackupFolder.Size = New System.Drawing.Size(266, 20)
         Me.txtBackupFolder.TabIndex = 1
         '
         'btnOK
         '
-        Me.btnOK.Location = New System.Drawing.Point(319, 124)
+        Me.btnOK.Location = New System.Drawing.Point(213, 81)
+        Me.btnOK.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.btnOK.Name = "btnOK"
-        Me.btnOK.Size = New System.Drawing.Size(105, 36)
+        Me.btnOK.Size = New System.Drawing.Size(70, 23)
         Me.btnOK.TabIndex = 2
         Me.btnOK.Text = "OK"
         Me.btnOK.UseVisualStyleBackColor = True
         '
         'btnCancel
         '
-        Me.btnCancel.Location = New System.Drawing.Point(437, 124)
+        Me.btnCancel.Location = New System.Drawing.Point(291, 81)
+        Me.btnCancel.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.btnCancel.Name = "btnCancel"
-        Me.btnCancel.Size = New System.Drawing.Size(105, 36)
+        Me.btnCancel.Size = New System.Drawing.Size(70, 23)
         Me.btnCancel.TabIndex = 3
         Me.btnCancel.Text = "Cancel"
         Me.btnCancel.UseVisualStyleBackColor = True
@@ -67,22 +71,24 @@ Partial Class ChooseBackupFolder
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(8, 26)
+        Me.Label1.Location = New System.Drawing.Point(5, 17)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(175, 20)
+        Me.Label1.Size = New System.Drawing.Size(119, 13)
         Me.Label1.TabIndex = 4
         Me.Label1.Text = "Archive Folder Location"
         '
         'ChooseBackupFolder
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(9.0!, 20.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(566, 181)
+        Me.ClientSize = New System.Drawing.Size(377, 118)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.btnCancel)
         Me.Controls.Add(Me.btnOK)
         Me.Controls.Add(Me.txtBackupFolder)
         Me.Controls.Add(Me.btnBrowseFolder)
+        Me.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.Name = "ChooseBackupFolder"
         Me.Text = "Choose Folder for Archive Files"
         Me.ResumeLayout(False)

@@ -15,40 +15,40 @@ static class PDFAppendFile
     {
         try
         {
+            // Retrieve the previously saved append file path from the application settings
             string append_file = Interaction.GetSetting(WIN2PDF_COMPANY, WIN2PDF_PRODUCT, APPEND_FILE_SETTING, "");
-            if (args.Length == 0 || append_file == "" ||  !File.Exists(append_file) ) // configure append file
+
+            // If no arguments are provided, or the append file is not set or doesn't exist, prompt the user to select a file
+            if (args.Length == 0 || append_file == "" || !File.Exists(append_file))
             {
                 string filePath = string.Empty;
 
-                System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog();
-
-                openFileDialog.Title = "Select PDF to Append";
-                if (append_file.Length > 0)
+                // Open a file dialog to allow the user to select a PDF file to append
+                System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog
                 {
-                    openFileDialog.InitialDirectory = Path.GetDirectoryName(append_file);
-                }
-                else
-                {
-                    openFileDialog.InitialDirectory = Environment.SpecialFolder.MyDocuments.ToString();
-                }
+                    Title = "Select PDF to Append",
+                    InitialDirectory = append_file.Length > 0 ? Path.GetDirectoryName(append_file) : Environment.SpecialFolder.MyDocuments.ToString(),
+                    Filter = "PDF files(*.pdf)|*.pdf",
+                    RestoreDirectory = true
+                };
 
-                openFileDialog.Filter = "PDF files(*.pdf)|*.pdf";
-                openFileDialog.RestoreDirectory = true;
-
-                if ((openFileDialog.ShowDialog() == DialogResult.OK))
+                // Save the selected file path to the application settings
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     Interaction.SaveSetting(WIN2PDF_COMPANY, WIN2PDF_PRODUCT, APPEND_FILE_SETTING, openFileDialog.FileName);
                 }
             }
 
+            // If a single argument is provided, process the file
             if (args.Length == 1)
             {
-                if (Path.GetExtension(args[0]).ToUpper() == ".PDF") //ignore if not PDF
+                // Ensure the provided file is a PDF
+                if (Path.GetExtension(args[0]).ToUpper() == ".PDF")
                 {
                     System.Diagnostics.Process newProc;
                     var win2pdfcmdline = Environment.SystemDirectory;
 
-                    // get the path to the Win2PDF command line executable
+                    // Determine the path to the Win2PDF command line executable based on the system architecture
                     if (System.Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE", EnvironmentVariableTarget.Machine) == "ARM64")
                     {
                         win2pdfcmdline += @"\spool\drivers\arm64\3\win2pdfd.exe";
@@ -62,44 +62,47 @@ static class PDFAppendFile
                         win2pdfcmdline += @"\spool\drivers\w32x86\3\win2pdfd.exe";
                     }
 
+                    // Check if the Win2PDF executable exists
                     if (File.Exists(win2pdfcmdline))
                     {
-
-                        // enclose the file names in quotes in case they contain spaces
-                        // command line documented at: https://www.win2pdf.com/doc/command-line-append-pdf.html
+                        // Construct the command line arguments for appending the PDF
+                        // The format is: append "file1" "file2" "file1"
+                        // This appends "file2" (append_file) to "file1" (args[0]) and saves the result back to "file1"
                         string arguments = string.Format("append \"{0}\" \"{1}\" \"{0}\"", args[0], append_file);
 
-                        ProcessStartInfo startInfo = new ProcessStartInfo(win2pdfcmdline);
+                        // Configure the process start information
+                        ProcessStartInfo startInfo = new ProcessStartInfo(win2pdfcmdline)
                         {
-                            var withBlock = startInfo;
-                            withBlock.Arguments = arguments;
-                            withBlock.WindowStyle = ProcessWindowStyle.Hidden;
-                        }
+                            Arguments = arguments,
+                            WindowStyle = ProcessWindowStyle.Hidden
+                        };
 
-                        // execute the append command
+                        // Execute the append command
                         newProc = System.Diagnostics.Process.Start(startInfo);
                         newProc.WaitForExit();
-                        if (newProc.HasExited)
+
+                        // Check the exit code to determine if the operation was successful
+                        if (newProc.HasExited && newProc.ExitCode != 0)
                         {
-                            if (newProc.ExitCode != 0)
-                            {
-                                MessageBox.Show(string.Format("Win2PDF command line failed, make sure Win2PDF is licensed: {0} {1}, error code {2}", win2pdfcmdline, arguments, newProc.ExitCode));
-                            }
+                            MessageBox.Show(string.Format("Win2PDF command line failed, make sure Win2PDF is licensed: {0} {1}, error code {2}", win2pdfcmdline, arguments, newProc.ExitCode));
                         }
                     }
                     else
                     {
+                        // Display an error message if Win2PDF is not installed
                         MessageBox.Show(string.Format("Win2PDF is not installed.  Download Win2PDF at https://www.win2pdf.com/download/"));
                     }
                 }
                 else
                 {
-                    MessageBox.Show(string.Format("Incorrect append file type {0}"), args[0]);
+                    // Display an error message if the provided file is not a PDF
+                    MessageBox.Show(string.Format("Incorrect append file type {0}", args[0]));
                 }
             }
         }
         catch (Exception ex)
         {
+            // Handle exceptions and log them to the Windows Event Log
             var exception_description = string.Format("Win2PDF plug-in exception {0}, stack {1}, targetsite {2}", ex.Message, ex.StackTrace, ex.TargetSite);
             MessageBox.Show(exception_description);
             using (EventLog eventLog = new EventLog("Application"))

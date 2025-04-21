@@ -6,27 +6,29 @@ using Microsoft.VisualBasic;
 
 static class PDF2TIFF
 {
-    public const  string WIN2PDF_COMPANY = "Dane Prairie Systems";
-    public const  string WIN2PDF_PRODUCT = "Win2PDF";
-    public const  string TIFF_RESOLUTION = "TIFFResolution";
+    public const string WIN2PDF_COMPANY = "Dane Prairie Systems";
+    public const string WIN2PDF_PRODUCT = "Win2PDF";
+    public const string TIFF_RESOLUTION = "TIFFResolution";
     public const string PLUG_IN_NAME = "Win2PDF PDF2TIFF Plug-in";
 
-    public const  int ERROR_LOCKED = 212;
-    public const  int ERROR_INVALID_FUNCTION = 2;
-    public const  int ERROR_FILE_NOT_FOUND = 2;
-    public const  int ERROR_ACCESS_DENIED = 5;
-    public const  int ERROR_BAD_FORMAT = 11;
-    public const  int ERROR_INVALID_PARAMETER = 87;
-    public const  int ERROR_SUCCESS = 0;
+    public const int ERROR_LOCKED = 212;
+    public const int ERROR_INVALID_FUNCTION = 2;
+    public const int ERROR_FILE_NOT_FOUND = 2;
+    public const int ERROR_ACCESS_DENIED = 5;
+    public const int ERROR_BAD_FORMAT = 11;
+    public const int ERROR_INVALID_PARAMETER = 87;
+    public const int ERROR_SUCCESS = 0;
 
     public static void Main(string[] args)
     {
         try
         {
+            // Retrieve the saved TIFF resolution setting or prompt the user to input it
             string resolution = Interaction.GetSetting(WIN2PDF_COMPANY, WIN2PDF_PRODUCT, TIFF_RESOLUTION, "");
 
             if (args.Length == 0 || resolution == "")
             {
+                // Prompt the user to enter the TIFF resolution if not provided
                 resolution = Interaction.InputBox("Enter TIFF Resolution:", PLUG_IN_NAME, "100");
                 Interaction.SaveSetting(WIN2PDF_COMPANY, WIN2PDF_PRODUCT, TIFF_RESOLUTION, resolution);
             }
@@ -35,7 +37,7 @@ static class PDF2TIFF
                 System.Diagnostics.Process newProc;
                 var win2pdfcmdline = Environment.SystemDirectory;
 
-                // get the path to the Win2PDF command line executable
+                // Determine the path to the Win2PDF command line executable based on the system architecture
                 if (System.Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE", EnvironmentVariableTarget.Machine) == "ARM64")
                 {
                     win2pdfcmdline += @"\spool\drivers\arm64\3\win2pdfd.exe";
@@ -54,10 +56,18 @@ static class PDF2TIFF
                     String ext = Path.GetExtension(args[0]).ToUpper();
                     if (ext == ".PDF")
                     {
+                        // Construct the output TIFF file name
                         string tiffname = System.IO.Path.Combine(Path.GetDirectoryName(args[0]), Path.GetFileNameWithoutExtension(args[0])) + ".tif";
-                        // command line format is: pdffile tifffile pagenumber xresolution yresolution
+
+                        // Command line format for pdf2tiffmono:
+                        // pdf2tiffmono "sourcepdf" "desttiff" pagenumber xresolution yresolution
+                        // - "sourcepdf": Path to the input PDF file
+                        // - "desttiff": Path to the output TIFF file
+                        // - "pagenumber": 0 to convert all pages into a multi-page TIFF
+                        // - "xresolution" and "yresolution": Resolution of the output TIFF in DPI
                         string arguments1 = string.Format("pdf2tiffmono \"{0}\" \"{1}\" 0 {2} {3}", args[0], tiffname, resolution, resolution);
 
+                        // Configure the process to execute the Win2PDF command
                         ProcessStartInfo startInfo = new ProcessStartInfo(win2pdfcmdline);
                         {
                             var withBlock = startInfo;
@@ -65,16 +75,17 @@ static class PDF2TIFF
                             withBlock.WindowStyle = ProcessWindowStyle.Hidden;
                         }
 
-                        // execute the command
+                        // Execute the command
                         newProc = System.Diagnostics.Process.Start(startInfo);
                         newProc.WaitForExit();
                         if (newProc.HasExited)
                         {
+                            // Handle the exit codes returned by the command
                             switch (newProc.ExitCode)
                             {
                                 case ERROR_SUCCESS:
                                     {
-                                        //delete the PDF on success
+                                        // Delete the original PDF file on successful conversion
                                         File.Delete(args[0]);
                                         break;
                                     }
@@ -110,6 +121,7 @@ static class PDF2TIFF
         }
         catch (Exception ex)
         {
+            // Log and display any exceptions that occur
             var exception_description = string.Format("{0} exception {1}, stack {2}, targetsite {3}", PLUG_IN_NAME, ex.Message, ex.StackTrace, ex.TargetSite);
             MessageBox.Show(exception_description);
             using (EventLog eventLog = new EventLog("Application"))

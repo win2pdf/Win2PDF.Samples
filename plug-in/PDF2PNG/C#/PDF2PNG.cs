@@ -6,25 +6,32 @@ using Microsoft.VisualBasic;
 
 static class PDF2PNG
 {
-    public const  string WIN2PDF_COMPANY = "Dane Prairie Systems";
-    public const  string WIN2PDF_PRODUCT = "Win2PDF";
-    public const  string PNG_RESOLUTION = "PNGResolution";
+    // Constants for application settings and error codes
+    public const string WIN2PDF_COMPANY = "Dane Prairie Systems";
+    public const string WIN2PDF_PRODUCT = "Win2PDF";
+    public const string PNG_RESOLUTION = "PNGResolution";
     public const string PLUG_IN_NAME = "Win2PDF PDF2PNG Plug-in";
 
-    public const  int ERROR_LOCKED = 212;
-    public const  int ERROR_INVALID_FUNCTION = 2;
-    public const  int ERROR_FILE_NOT_FOUND = 2;
-    public const  int ERROR_ACCESS_DENIED = 5;
-    public const  int ERROR_BAD_FORMAT = 11;
-    public const  int ERROR_INVALID_PARAMETER = 87;
-    public const  int ERROR_SUCCESS = 0;
+    public const int ERROR_LOCKED = 212;
+    public const int ERROR_INVALID_FUNCTION = 2;
+    public const int ERROR_FILE_NOT_FOUND = 2;
+    public const int ERROR_ACCESS_DENIED = 5;
+    public const int ERROR_BAD_FORMAT = 11;
+    public const int ERROR_INVALID_PARAMETER = 87;
+    public const int ERROR_SUCCESS = 0;
 
+    /// <summary>
+    /// Main entry point for the application.
+    /// </summary>
+    /// <param name="args">Command-line arguments. Expects a single argument: the path to the PDF file.</param>
     public static void Main(string[] args)
     {
         try
         {
+            // Retrieve the saved PNG resolution setting
             string resolution = Interaction.GetSetting(WIN2PDF_COMPANY, WIN2PDF_PRODUCT, PNG_RESOLUTION, "");
 
+            // If no arguments or resolution is missing, prompt the user for resolution
             if (args.Length == 0 || resolution == "")
             {
                 resolution = Interaction.InputBox("Enter PNG Resolution:", PLUG_IN_NAME, "100");
@@ -35,7 +42,7 @@ static class PDF2PNG
                 System.Diagnostics.Process newProc;
                 var win2pdfcmdline = Environment.SystemDirectory;
 
-                // get the path to the Win2PDF command line executable
+                // Determine the path to the Win2PDF command line executable based on system architecture
                 if (System.Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE", EnvironmentVariableTarget.Machine) == "ARM64")
                 {
                     win2pdfcmdline += @"\spool\drivers\arm64\3\win2pdfd.exe";
@@ -49,13 +56,20 @@ static class PDF2PNG
                     win2pdfcmdline += @"\spool\drivers\w32x86\3\win2pdfd.exe";
                 }
 
+                // Check if the Win2PDF executable exists
                 if (File.Exists(win2pdfcmdline))
                 {
                     String ext = Path.GetExtension(args[0]).ToUpper();
                     if (ext == ".PDF")
                     {
                         string pngname = System.IO.Path.Combine(Path.GetDirectoryName(args[0]), Path.GetFileNameWithoutExtension(args[0])) + ".png";
-                        // command line format is: pdffile pngfile pagenumber xresolution yresolution
+
+                        // Command line format for pdf2png:
+                        // win2pdfd.exe pdf2png "sourcepdf" "destpng" pagenumber xresolution yresolution
+                        // - "sourcepdf": Path to the source PDF file
+                        // - "destpng": Path to the destination PNG file
+                        // - "pagenumber": Page number to convert (0 for all pages)
+                        // - "xresolution" and "yresolution": Resolution in DPI for the output PNG
                         string arguments1 = string.Format("pdf2png \"{0}\" \"{1}\" 0 {2} {3}", args[0], pngname, resolution, resolution);
 
                         ProcessStartInfo startInfo = new ProcessStartInfo(win2pdfcmdline);
@@ -65,16 +79,17 @@ static class PDF2PNG
                             withBlock.WindowStyle = ProcessWindowStyle.Hidden;
                         }
 
-                        // execute the print direct command
+                        // Execute the command and wait for it to complete
                         newProc = System.Diagnostics.Process.Start(startInfo);
                         newProc.WaitForExit();
                         if (newProc.HasExited)
                         {
+                            // Handle the exit code from the process
                             switch (newProc.ExitCode)
                             {
                                 case ERROR_SUCCESS:
                                     {
-                                        //delete the PDF on success
+                                        // Delete the PDF file on successful conversion
                                         File.Delete(args[0]);
                                         break;
                                     }
@@ -110,6 +125,7 @@ static class PDF2PNG
         }
         catch (Exception ex)
         {
+            // Log and display any exceptions that occur
             var exception_description = string.Format("{0} exception {1}, stack {2}, targetsite {3}", PLUG_IN_NAME, ex.Message, ex.StackTrace, ex.TargetSite);
             MessageBox.Show(exception_description);
             using (EventLog eventLog = new EventLog("Application"))
