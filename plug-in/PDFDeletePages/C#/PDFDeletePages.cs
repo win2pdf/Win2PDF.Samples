@@ -38,7 +38,12 @@ static class PDFDeletePages
                         string truncated_file = args[0] + ".pdf";
 
                         // Prepare the command line arguments to delete pages 2 through 9999
-                        // The command is documented at: https://www.win2pdf.com/doc/command-line-delete-pages-pdf.html
+                        // Syntax: win2pdfd.exe deletepages "sourcefile" startpage endpage "destfile"
+                        // - "sourcefile": The path to the original PDF file (can be a local file or a URL).
+                        // - startpage: The first page to delete (inclusive).
+                        // - endpage: The last page to delete (inclusive).
+                        // - "destfile": The path to save the modified PDF file. If the same as "sourcefile", the file is modified in place.
+                        // Note: File names with spaces must be enclosed in quotes.
                         string arguments = string.Format("deletepages \"{0}\" 2 9999 \"{1}\"", args[0], truncated_file);
 
                         // Configure the process start information

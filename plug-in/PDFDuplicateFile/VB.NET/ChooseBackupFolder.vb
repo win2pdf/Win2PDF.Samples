@@ -1,9 +1,14 @@
 ﻿Imports System.Windows.Forms
+Imports Microsoft.WindowsAPICodePack.Dialogs
 
 Public Class ChooseBackupFolder
     Private Sub btnBrowseFolder_Click(sender As Object, e As EventArgs) Handles btnBrowseFolder.Click
-        If FolderBrowserDialog1.ShowDialog() = DialogResult.OK Then
-            txtBackupFolder.Text = FolderBrowserDialog1.SelectedPath
+        ' Open a folder picker dialog to allow the user to select a folder
+        Dim dialog As CommonOpenFileDialog = New CommonOpenFileDialog()
+        dialog.IsFolderPicker = True ' Ensure the dialog only allows folder selection
+        If dialog.ShowDialog() = CommonFileDialogResult.Ok Then
+            ' Set the selected folder path to the text box
+            txtBackupFolder.Text = dialog.FileName
         End If
     End Sub
 
