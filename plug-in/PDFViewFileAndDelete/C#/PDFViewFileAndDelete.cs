@@ -7,6 +7,7 @@ using Microsoft.VisualBasic;
 
 static class PDFViewFileAndDelete
 {
+    // Error code for file sharing violation
     const int ERROR_SHARING_VIOLATION = 32;
 
     [STAThreadAttribute]
@@ -14,55 +15,77 @@ static class PDFViewFileAndDelete
     {
         try
         {
+            // Ensure exactly one argument is passed (the file path)
             if (args.Length == 1)
             {
+                // Check if the specified file exists
                 if (File.Exists(args[0]))
                 {
+                    // Create a new process to open the file
                     var process = new Process()
                     {
                         StartInfo = new ProcessStartInfo()
                         {
-                            FileName = args[0]
+                            FileName = args[0] // File to be opened
                         }
                     };
+
+                    // Start the process
                     process.Start();
-                    if (process.HasExited) //if process was already started, poll for file to close
+
+                    // Check if the process has already exited
+                    if (process.HasExited)
                     {
+                        // Poll until the file is no longer in use, then delete it
                         while (true)
                         {
                             try
                             {
-                                File.Delete(args[0]);
-                                break;
+                                File.Delete(args[0]); // Attempt to delete the file
+                                break; // Exit the loop if successful
                             }
                             catch (IOException ex)
                             {
+                                // Handle file sharing violation by waiting and retrying
                                 if ((ex.HResult & 0xFFFF) == ERROR_SHARING_VIOLATION)
-                                    System.Threading.Thread.Sleep(1000);
+                                    System.Threading.Thread.Sleep(1000); // Wait 1 second
                                 else
-                                    break; // exit for an unknown error
+                                    break; // Exit for any other IO exception
                             }
                             catch
                             {
-                                break;
+                                break; // Exit for any other exception
                             }
                         }
                     }
                     else
                     {
+                        // Wait for the process to exit
                         process.WaitForExit();
-                        // delete file after the viewer is closed
+
+                        // Delete the file after the viewer is closed
                         File.Delete(args[0]);
                     }
                 }
             }
             else
+            {
+                // Show an error message if the number of arguments is invalid
                 MessageBox.Show("Invalid number of parameters");
+            }
         }
         catch (Exception ex)
         {
-            var exception_description = string.Format("Win2PDF plug-in exception {0}, stack {1}, targetsite {2}", ex.Message, ex.StackTrace, ex.TargetSite);
+            // Handle unexpected exceptions
+            var exception_description = string.Format(
+                "Win2PDF plug-in exception {0}, stack {1}, targetsite {2}",
+                ex.Message, ex.StackTrace, ex.TargetSite
+            );
+
+            // Display the exception details in a message box
             MessageBox.Show(exception_description);
+
+            // Log the exception details to the Windows Event Log
             using (EventLog eventLog = new EventLog("Application"))
             {
                 eventLog.Source = "Win2PDF";

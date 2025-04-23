@@ -2,10 +2,12 @@
 Imports System.IO
 
 Module PDFPrintActualSize
+    ' Constants for application settings and error codes
     Public Const WIN2PDF_COMPANY As String = "Dane Prairie Systems"
     Public Const WIN2PDF_PRODUCT As String = "Win2PDF"
     Public Const PRINTER_NAME As String = "Actual Size Printer"
 
+    ' Common error codes
     Public Const ERROR_LOCKED As Integer = 212
     Public Const ERROR_INVALID_FUNCTION As Integer = 2
     Public Const ERROR_FILE_NOT_FOUND As Integer = 2
@@ -14,14 +16,18 @@ Module PDFPrintActualSize
     Public Const ERROR_INVALID_PARAMETER As Integer = 87
     Public Const ERROR_SUCCESS = 0
 
+    ' Main entry point of the application
     Sub Main(ByVal args() As String)
         Try
+            ' Retrieve the printer name from application settings
             Dim printername As String = Interaction.GetSetting(WIN2PDF_COMPANY, WIN2PDF_PRODUCT, PRINTER_NAME, "")
 
-            If args.Length = 0 OrElse printername = "" Then 'configure printer
+            ' If no arguments are provided or printer name is not configured, prompt the user to select a printer
+            If args.Length = 0 OrElse printername = "" Then
                 MsgBox("Select Print Actual Size printer.", MsgBoxStyle.Information, WIN2PDF_PRODUCT)
                 Dim dlgPrint As New Windows.Forms.PrintDialog
                 Try
+                    ' Configure the print dialog
                     With dlgPrint
                         .AllowSelection = True
                         .ShowNetwork = True
@@ -29,19 +35,24 @@ Module PDFPrintActualSize
                             .PrinterSettings.PrinterName = printername
                         End If
                     End With
+                    ' Show the print dialog and save the selected printer name
                     If dlgPrint.ShowDialog = Windows.Forms.DialogResult.OK Then
                         printername = dlgPrint.PrinterSettings.PrinterName
                     End If
                 Catch ex As Exception
+                    ' Handle any errors during printer selection
                     MsgBox("Print Error: " & ex.Message, MsgBoxStyle.Exclamation, WIN2PDF_PRODUCT)
                 End Try
 
+                ' Save the selected printer name to application settings
                 Interaction.SaveSetting(WIN2PDF_COMPANY, WIN2PDF_PRODUCT, PRINTER_NAME, printername)
-            ElseIf args.Length = 1 Then 'the only parameter is the PDF file name
+
+                ' If one argument is provided, assume it is the PDF file name
+            ElseIf args.Length = 1 Then
                 Dim newProc As System.Diagnostics.Process
                 Dim win2pdfcmdline = Environment.SystemDirectory
 
-                'get the path to the Win2PDF command line executable
+                ' Determine the path to the Win2PDF command line executable based on system architecture
                 If System.Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE", EnvironmentVariableTarget.Machine) = "ARM64" Then
                     win2pdfcmdline += "\spool\drivers\arm64\3\win2pdfd.exe"
                 ElseIf Environment.Is64BitOperatingSystem Then
@@ -50,7 +61,12 @@ Module PDFPrintActualSize
                     win2pdfcmdline += "\spool\drivers\w32x86\3\win2pdfd.exe"
                 End If
 
+                ' Check if the Win2PDF executable exists
                 If File.Exists(win2pdfcmdline) Then
+                    ' Construct the command line arguments for the "printpdfactualsize" command
+                    ' Syntax: win2pdfd.exe printpdfactualsize "sourcefile" "printername"
+                    ' - "sourcefile": The path to the PDF file to be printed (can be a local file or URL)
+                    ' - "printername": The name of the printer to use for printing
                     Dim arguments1 As String = String.Format("printpdfactualsize ""{0}"" ""{1}""", args(0), printername)
 
                     Dim startInfo As New ProcessStartInfo(win2pdfcmdline)
@@ -59,13 +75,14 @@ Module PDFPrintActualSize
                         .WindowStyle = ProcessWindowStyle.Hidden
                     End With
 
-                    'execute the print actual size command
+                    ' Execute the print actual size command
                     newProc = Diagnostics.Process.Start(startInfo)
                     newProc.WaitForExit()
                     If newProc.HasExited Then
+                        ' Handle the exit code from the process
                         Select Case newProc.ExitCode
                             Case ERROR_SUCCESS
-                                        'do nothing
+                                ' Do nothing if the process succeeded
                             Case ERROR_FILE_NOT_FOUND
                                 Windows.Forms.MessageBox.Show(String.Format("Win2PDF could not find file: {0}", win2pdfcmdline), WIN2PDF_PRODUCT, MessageBoxButtons.OK, MessageBoxIcon.Error)
                             Case ERROR_ACCESS_DENIED
@@ -75,12 +92,15 @@ Module PDFPrintActualSize
                         End Select
                     End If
                 Else
+                    ' Notify the user if Win2PDF is not installed
                     Windows.Forms.MessageBox.Show(String.Format("Win2PDF is not installed.  Download Win2PDF at https://www.win2pdf.com/download/"))
                 End If
             Else
+                ' Handle invalid number of arguments
                 MessageBox.Show("Invalid number of parameters")
             End If
         Catch ex As Exception
+            ' Log and display any unhandled exceptions
             Dim exception_description = String.Format("Win2PDF plug-in exception {0}, stack {1}, targetsite {2}", ex.Message, ex.StackTrace, ex.TargetSite)
             MessageBox.Show(exception_description)
             Using eventLog As EventLog = New EventLog("Application")

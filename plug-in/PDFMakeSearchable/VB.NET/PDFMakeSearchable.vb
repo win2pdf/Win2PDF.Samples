@@ -4,21 +4,21 @@ Imports System.Windows
 Imports Microsoft.Win32
 Imports System.Diagnostics
 
-#Const WAITFOREXIT = False 'set to True to wait for searchable command to complete
-
-
+#Const WAITFOREXIT = False ' Set to True to wait for the searchable command to complete
 
 Module PDFMakeSearchable
 
-
+    ' Entry point of the application
     Sub Main(ByVal args() As String)
         Try
-            If args.Length = 1 Then 'the only parameter is the PDF file name
-                If Path.GetExtension(args(0)).ToUpper = ".PDF" Then 'ignore if not PDF
+            ' Check if exactly one argument is passed (the PDF file name)
+            If args.Length = 1 Then
+                ' Ensure the file has a .PDF extension (case-insensitive)
+                If Path.GetExtension(args(0)).ToUpper = ".PDF" Then
                     Dim newProc As Diagnostics.Process
                     Dim win2pdfcmdline = Environment.SystemDirectory
 
-                    'get the path to the Win2PDF command line executable
+                    ' Determine the path to the Win2PDF command line executable based on system architecture
                     If System.Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE", EnvironmentVariableTarget.Machine) = "ARM64" Then
                         win2pdfcmdline += "\spool\drivers\arm64\3\win2pdfd.exe"
                     ElseIf Environment.Is64BitOperatingSystem Then
@@ -27,37 +27,48 @@ Module PDFMakeSearchable
                         win2pdfcmdline += "\spool\drivers\w32x86\3\win2pdfd.exe"
                     End If
 
+                    ' Check if the Win2PDF executable exists
                     If File.Exists(win2pdfcmdline) Then
-                        Dim truncated_file As String = args(0) + ".pdf"
-
-                        'enclose the file names in quotes in case they contain spaces
-                        'Make the PDF searchable in place. command line documented at: https://www.win2pdf.com/doc/command-line-make-searcheable-ocr-pdf.html
+                        ' Prepare the command line arguments to make the PDF searchable
+                        ' Syntax of the makesearchable command:
+                        ' win2pdfd.exe makesearchable "sourcefile" "destfile"
+                        ' - "sourcefile": The path to the input PDF file. Can be a local file path or a URL.
+                        ' - "destfile": The path to the output PDF file. If the same as "sourcefile", the file is modified in place.
+                        ' - Both file paths must be enclosed in quotes if they contain spaces.
+                        ' - The command uses Optical Character Recognition (OCR) to add an invisible text layer to the PDF, making it searchable.
                         Dim arguments As String = String.Format("makesearchable ""{0}"" ""{1}""", args(0), args(0))
 
+                        ' Configure the process start information
                         Dim startInfo As New ProcessStartInfo(win2pdfcmdline)
                         With startInfo
                             .Arguments = arguments
-                            .WindowStyle = ProcessWindowStyle.Hidden
+                            .WindowStyle = ProcessWindowStyle.Hidden ' Run the process in a hidden window
                         End With
 
-                        'execute the deletepages command
+                        ' Start the process to make the PDF searchable
                         newProc = Diagnostics.Process.Start(startInfo)
+
 #If WAITFOREXIT Then
+                        ' Optionally wait for the process to complete and check its exit code
                         newProc.WaitForExit()
                         If newProc.HasExited Then
                             If newProc.ExitCode <> 0 Then
+                                ' Show an error message if the process fails
                                 MessageBox.Show(String.Format("Win2PDF command line failed, make sure Win2PDF is licensed: {0} {1}, error code {2}", win2pdfcmdline, arguments, newProc.ExitCode))
                             End If
                         End If
 #End If
                     Else
+                        ' Show a message if Win2PDF is not installed
                         MessageBox.Show(String.Format("Win2PDF is not installed.  Download Win2PDF at https://www.win2pdf.com/download/"))
                     End If
-                End If                
+                End If
             Else
+                ' Show a message if the number of parameters is invalid
                 MessageBox.Show("Invalid number of parameters")
             End If
         Catch ex As Exception
+            ' Handle any exceptions and log the error details
             Dim exception_description = String.Format("Win2PDF plug-in exception {0}, stack {1}, targetsite {2}", ex.Message, ex.StackTrace, ex.TargetSite)
             MessageBox.Show(exception_description)
             Using eventLog As EventLog = New EventLog("Application")

@@ -12,52 +12,53 @@ static class PDFSendToOutlook
     {
         try
         {
+            // Check if exactly one argument (PDF file path) is provided
             if (args.Length == 1)
             {
-
-                // Create an Outlook application.
+                // Create an instance of the Outlook application
                 Outlook._Application oApp;
                 oApp = new Outlook.Application();
 
-                // Create a new MailItem.
+                // Create a new email (MailItem) in Outlook
                 Outlook._MailItem oMsg;
                 oMsg = (Outlook._MailItem)oApp.CreateItem((OlItemType)NetOffice.OutlookApi.Enums.OlItemType.olMailItem);
 
-                // set the subject to the PDF file name without the path + attached
+                // Set the email subject to the PDF file name (without path) followed by "attached"
                 oMsg.Subject = Path.GetFileName(args[0]) + " attached";
 
-                // customize these fields to add "To" address or body
-                // oMsg.To = 
-                // oMsg.Body =
+                // Optional: Customize the "To" field and email body
+                // oMsg.To = "recipient@example.com";
+                // oMsg.Body = "Please find the attached PDF.";
 
-                // Add the PDF as an attachment
-                string sSource = args[0];
-                string sDisplayName = Path.GetFileName(args[0]);
-                string sBodyLen = "0";
+                // Add the PDF file as an attachment to the email
+                string sSource = args[0]; // Full path to the PDF file
+                string sDisplayName = Path.GetFileName(args[0]); // File name to display in the email
+                string sBodyLen = "0"; // Position of the attachment in the email body
 
-                Outlook.Attachments oAttachs = oMsg.Attachments;
+                Outlook.Attachments oAttachs = oMsg.Attachments; // Get the attachments collection
                 Outlook.Attachment oAttach;
                 oAttach = oAttachs.Add(sSource, OlAttachmentType.olByValue, Convert.ToInt32(sBodyLen) + 1, sDisplayName);
 
-                // Display
+                // Display the email to the user for review
                 oMsg.Display(true);
 
-                // Send
-                // oMsg.Send()
+                // Optional: Uncomment the following line to send the email automatically
+                // oMsg.Send();
 
-                // close OutlookApi And dispose
+                // Close the Outlook application and release resources
                 oApp.Quit();
                 oApp.Dispose();
 
-                // Clean up
-                oApp = null/* TODO Change to default(_) if this is not a reference type */;
-                oMsg = null/* TODO Change to default(_) if this is not a reference type */;
-                oAttach = null/* TODO Change to default(_) if this is not a reference type */;
-                oAttachs = null/* TODO Change to default(_) if this is not a reference type */;
+                // Clean up references to avoid memory leaks
+                oApp = null;
+                oMsg = null;
+                oAttach = null;
+                oAttachs = null;
             }
         }
         catch (Exception ex)
         {
+            // Handle exceptions by showing a message box and logging the error to the Event Log
             var exception_description = string.Format("Win2PDF Send To Outlook plug-in exception {0}, stack {1}, targetsite {2}", ex.Message, ex.StackTrace, ex.TargetSite);
             System.Windows.Forms.MessageBox.Show(exception_description);
             using (EventLog eventLog = new EventLog("Application"))
