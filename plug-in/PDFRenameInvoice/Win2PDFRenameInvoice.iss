@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Win2PDF Rename Invoice Plug-In"
-#define MyAppVersion "1.0"
+#define MyAppVersion "1.01"
 #define MyAppPublisher "Dane Prairie Systems, LLC"
 #define MyAppURL "https://www.win2pdf.com"
 #define MyAppExeName "PDFRenameInvoice.exe"
@@ -43,6 +43,7 @@ Source: "c#\bin\Release\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 ;use "SOFTWARE\Dane Prairie Systems\PrinterName" to install for a specific printer
 ;Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; ValueType:string; ValueName: "default post action"; ValueData: "{app}\{#MyAppExeName} ""%s"""; Flags: uninsdeletevalue
 Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; ValueType:string; ValueName: "default watch action"; ValueData: "{app}\{#MyAppExeName} ""%s"""; Flags: uninsdeletevalue
+Root: HKLM; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; ValueType:string; ValueName: "default watch action"; ValueData: "{app}\{#MyAppExeName} ""%s"""; Flags: uninsdeletevalue
 ;Allow user to turn "Rename Invoice" on or off in the Win2PDF File Save window. Remove this to always apply.
 ;Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; ValueType:string; ValueName: "post action checkbox label"; ValueData: "Rename Invoice"; Flags: uninsdeletevalue
 

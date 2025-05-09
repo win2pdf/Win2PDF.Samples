@@ -147,7 +147,8 @@ public class PDFRenameInvoice
         // set the field bounds in points
         // This value can be found by defining a content filed in the Win2PDF Desktop App,
         // and then viewing "PDFAutoNameContentField" in the registry at "HKEY_CURRENT_USER\Software\VB and VBA Program Settings\Dane Prairie Systems\Win2PDF"
-        Interaction.SaveSetting(WIN2PDF_COMPANY, WIN2PDF_PRODUCT, "PDFAutoNameContentField", "0,268.26065850679112,30.291515619614547,99.516050736390227,40.777040257173425");
+        Interaction.SaveSetting(WIN2PDF_COMPANY, WIN2PDF_PRODUCT, "PDFAutoNameContentField", "0,255.39156424386158,10.919076192251207,130.02812517438616,58.841688369353733");
+
         // Extract the invoice number from the specified field in the PDF
         invoiceNumber = ExtractInvoiceNumberFromField(inputPdf, printername);
         return invoiceNumber; // Return the extracted account number or null if not found
