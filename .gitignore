@@ -384,3 +384,4 @@ plug-in/PDFOpenFolder/Output/Win2PDF-Open-Folder-Plug-In.exe
 plug-in/PDF2TIFF/Output/Win2PDF-PDF2TIFF-Plug-In.exe
 plug-in/PDFConditionalRename/Output/Win2PDF-Conditional-Rename-Plug-In.exe
 plug-in/PDFRenameInvoice/Output/Win2PDF-Rename-Invoice-Plug-In.exe
+plug-in/PDFDeleteBlankPages/Output/Win2PDF-Delete-Blank-Pages-Plug-In.exe
