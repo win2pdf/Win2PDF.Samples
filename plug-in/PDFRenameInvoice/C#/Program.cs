@@ -151,7 +151,95 @@ public class PDFRenameInvoice
 
         // Extract the invoice number from the specified field in the PDF
         invoiceNumber = ExtractInvoiceNumberFromField(inputPdf, printername);
+
+        if (invoiceNumber == null || invoiceNumber.Length > 6 ) {
+            // If we can't find the invoice number, converting to an image only PDF and then redoing the OCR can make fields searchable
+            string outPDF = Path.GetDirectoryName(inputPdf) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(inputPdf) + $"-imageonly.pdf";
+            ConvertToImageOnly(inputPdf, outPDF); // Convert the PDF to an image-only format
+            if (File.Exists(outPDF))
+            {
+                MakeSearchable(outPDF, outPDF);
+                // Extract the invoice number from the image-only PDF
+                invoiceNumber = ExtractInvoiceNumberFromField(outPDF, printername);
+                File.Delete(outPDF); // Delete the image-only PDF after extraction
+            }
+            else
+            {
+                writeToEventLog($"Failed to create image-only PDF: {outPDF}", EventLogEntryType.Error);
+            }
+        }
         return invoiceNumber; // Return the extracted account number or null if not found
+    }
+
+    private static void ConvertToImageOnly(string inputPdf, string outPDF)
+    {
+        // Syntax of imagepdf:
+        // win2pdfd.exe imagepdf "sourcepdf" "destpdf" "colormode"
+        // - "sourcepdf": Path to the PDF file
+        // - "destpdf": Path to the output PDF file
+        // - "colormode": Color mode (mono, grayscale, color)
+
+        ExecuteWin2PDFCommand($"imagepdf \"{inputPdf}\" \"{outPDF}\" grayscale");
+    }
+
+    private static void MakeSearchable(string inputPdf, string outPDF)
+    {
+        // Syntax of imagepdf:
+        // win2pdfd.exe makesearchable "sourcepdf" "destpdf" 
+        // - "sourcepdf": Path to the PDF file
+        // - "destpdf": Path to the output PDF file
+
+        ExecuteWin2PDFCommand($"makesearchable \"{inputPdf}\" \"{outPDF}\"");
+    }
+
+
+    private static void ExecuteWin2PDFCommand(string args)
+    {
+        try
+        {
+            // Determine the path to the Win2PDF command line executable
+            var win2pdfcmdline = Environment.SystemDirectory;
+
+            if (System.Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE", EnvironmentVariableTarget.Machine) == "ARM64")
+            {
+                win2pdfcmdline += @"\spool\drivers\arm64\3\win2pdfd.exe";
+            }
+            else if (Environment.Is64BitOperatingSystem)
+            {
+                win2pdfcmdline += @"\spool\drivers\x64\3\win2pdfd.exe";
+            }
+            else
+            {
+                win2pdfcmdline += @"\spool\drivers\w32x86\3\win2pdfd.exe";
+            }
+
+
+            // Set up the process to execute the Win2PDF command
+            ProcessStartInfo psi = new ProcessStartInfo
+            {
+                FileName = win2pdfcmdline,
+                Arguments = args,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+
+            // Execute the command and capture the output
+            using (Process process = Process.Start(psi))
+            {
+                process.WaitForExit();
+
+                if (process.ExitCode != 0)
+                {
+                    // Log an error if the command fails
+                    writeToEventLog($"Win2PDF imagepdf command failed with exit code: {process.ExitCode}", EventLogEntryType.Error);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            // Catch and display any errors that occur during the extraction process
+            writeToEventLog($"Error executing Win2PDF command: {ex.Message}", EventLogEntryType.Error);
+        }
     }
 
     private static string ExtractInvoiceNumberFromSearch(string inputPdf, string searchString)

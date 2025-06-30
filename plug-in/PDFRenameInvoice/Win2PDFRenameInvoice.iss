@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Win2PDF Rename Invoice Plug-In"
-#define MyAppVersion "1.01"
+#define MyAppVersion "1.03"
 #define MyAppPublisher "Dane Prairie Systems, LLC"
 #define MyAppURL "https://www.win2pdf.com"
 #define MyAppExeName "PDFRenameInvoice.exe"
