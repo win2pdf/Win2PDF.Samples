@@ -30,6 +30,15 @@ Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
 
+[Components]
+Name: "printer"; Description: "Install Win2PDF Printer Plug-In"; Types: compact custom
+Name: "batch"; Description: "Install Batch Convert Plug-In"; Types: custom; 
+Name: "watch"; Description: "Install Watch Folder and Convert Plug-In"; Types: custom; 
+
+[Types]
+Name: "compact"; Description: "Default Installation"
+Name: "custom"; Description: "Custom installation"; Flags: iscustom
+
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
@@ -41,9 +50,14 @@ Source: "C#\bin\Release\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 ;configure Win2PDF to use the plug-in
 ;use HKLM to install for all users
 ;use "SOFTWARE\Dane Prairie Systems\PrinterName" to install for a specific printer
-Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; ValueType:string; ValueName: "default post action"; ValueData: "{app}\{#MyAppExeName} ""%s"""; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; ValueType:string; ValueName: "default post action"; ValueData: "{app}\{#MyAppExeName} ""%s"""; Flags: uninsdeletevalue; Components: printer
 ;Allow user to turn "Append PDF" on or off in the Win2PDF File Save window. Remove this to always apply.
-Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; ValueType:string; ValueName: "post action checkbox label"; ValueData: "Append PDF"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; ValueType:string; ValueName: "post action checkbox label"; ValueData: "Append PDF"; Flags: uninsdeletevalue;  Components: printer
+;install as a batch convert plug-in if the user selected the option
+Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; ValueType:string; ValueName: "default batch action"; ValueData: "{app}\{#MyAppExeName} ""%s"""; Flags: uninsdeletevalue; Components: batch
+;install as a watch folder and convert plug-in if the user selected the option
+Root: HKCU; Subkey: "SOFTWARE\Dane Prairie Systems\{#MyWin2PDFPrinterName}"; ValueType:string; ValueName: "default watch action"; ValueData: "{app}\{#MyAppExeName} ""%s"""; Flags: uninsdeletevalue; Components: watch
+
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; WorkingDir: "{app}"; Description: "Configure Win2PDF Append File"; 
