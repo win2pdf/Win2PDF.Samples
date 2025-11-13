@@ -1,5 +1,6 @@
 ﻿Imports System.Windows.Forms
 Imports System.IO
+Imports Microsoft.Win32
 
 Module PDFDirectPrint
     ' Constants for application settings and error codes
@@ -21,8 +22,20 @@ Module PDFDirectPrint
             ' Retrieve the printer name from application settings
             Dim printername As String = Interaction.GetSetting(WIN2PDF_COMPANY, WIN2PDF_PRODUCT, PRINTER_NAME, "")
 
+            ' If the setting does not exist, try to load from the registry
+            If String.IsNullOrEmpty(printername) Then
+                Using regKey As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Dane Prairie Systems\Win2PDF")
+                    If regKey IsNot Nothing Then
+                        Dim regPrinterName = regKey.GetValue(PRINTER_NAME)
+                        If regPrinterName IsNot Nothing Then
+                            printername = regPrinterName.ToString()
+                        End If
+                    End If
+                End Using
+            End If
+
             ' If no arguments are provided or the printer name is not set, configure the printer
-            If args.Length = 0 OrElse printername = "" Then
+            If args.Length = 0 OrElse String.IsNullOrEmpty(printername) Then
                 MsgBox("Select PDF Direct Print printer.", MsgBoxStyle.Information, WIN2PDF_PRODUCT)
                 Dim dlgPrint As New Windows.Forms.PrintDialog
                 Try

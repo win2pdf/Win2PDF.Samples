@@ -10,6 +10,8 @@
 
 [PDF Delete Pages](/plug-in/PDFDeletePages) - Automatically deletes extra pages from a newly created PDF
 
+[PDF Delete Blank Pages](/plug-in/PDFDeleteBlankPages) - Automatically detect and delete blank or empty pages
+
 [PDF Split Pages](/plug-in/PDFSplitPages) - Automatically splits a multi-page PDF into separate one page PDFs
 
 [PDF Append File](/plug-in/PDFAppendFile) - Automatically appends the configured PDF file to newly created PDFs
@@ -41,6 +43,10 @@
 [PDF Reformat As Text](/plug-in/PDFReformatAsText) - Automatically reformat newly created PDF files created by Win2PDF using a fixed width font.
 
 [PDF Conditionally Rename Based on Content](plug-in/PDFConditionalRename) - Conditionally rename a PDF based on the content of the PDF and conditional searches.
+
+[PDF Make Searchable](/plug-in/PDFMakeSearchable) - Automatically print a newly created PDF to a printer that supports Direct PDF printing.
+
+[Install a Win2PDF Plug-in](/plug-in/InstallPlugin) - Install a Win2PDF printer, batch convert, or watch folder and convert plug-in. 
 
 Plug-ins require that [Win2PDF](https://www.win2pdf.com) is installed.  An evaluation version of Win2PDF can be downloaded for free at https://www.win2pdf.com/download/ 
 
