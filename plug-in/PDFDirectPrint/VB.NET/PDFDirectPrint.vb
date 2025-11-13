@@ -24,7 +24,8 @@ Module PDFDirectPrint
 
             ' If the setting does not exist, try to load from the registry
             If String.IsNullOrEmpty(printername) Then
-                Using regKey As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Dane Prairie Systems\Win2PDF")
+                Dim regPath As String = $"SOFTWARE\{WIN2PDF_COMPANY}\{WIN2PDF_PRODUCT}"
+                Using regKey As RegistryKey = Registry.LocalMachine.OpenSubKey(regPath)
                     If regKey IsNot Nothing Then
                         Dim regPrinterName = regKey.GetValue(PRINTER_NAME)
                         If regPrinterName IsNot Nothing Then
@@ -55,6 +56,20 @@ Module PDFDirectPrint
 
                 ' Save the selected printer name to application settings
                 Interaction.SaveSetting(WIN2PDF_COMPANY, WIN2PDF_PRODUCT, PRINTER_NAME, printername)
+
+                ' Also save to HKLM if the user is an administrator
+                If IsUserAdministrator() Then
+                    Try
+                        Dim regPath As String = $"SOFTWARE\{WIN2PDF_COMPANY}\{WIN2PDF_PRODUCT}"
+                        Using regKey As RegistryKey = Registry.LocalMachine.CreateSubKey(regPath, True)
+                            If regKey IsNot Nothing Then
+                                regKey.SetValue(PRINTER_NAME, printername, RegistryValueKind.String)
+                            End If
+                        End Using
+                    Catch rex As Exception
+                        MessageBox.Show("Unable to save printer name to HKLM: " & rex.Message, WIN2PDF_PRODUCT, MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                    End Try
+                End If
             ElseIf args.Length = 1 Then
                 ' If one argument is provided, treat it as the PDF file name to print
                 Dim newProc As System.Diagnostics.Process
@@ -118,5 +133,16 @@ Module PDFDirectPrint
             End Using
         End Try
     End Sub
+
+    ' Check if the current user is an administrator
+    Private Function IsUserAdministrator() As Boolean
+        Try
+            Dim identity = System.Security.Principal.WindowsIdentity.GetCurrent()
+            Dim principal = New System.Security.Principal.WindowsPrincipal(identity)
+            Return principal.IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator)
+        Catch
+            Return False
+        End Try
+    End Function
 
 End Module
