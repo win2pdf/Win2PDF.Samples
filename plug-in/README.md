@@ -42,7 +42,7 @@
 
 [PDF Reformat As Text](/plug-in/PDFReformatAsText) - Automatically reformat newly created PDF files created by Win2PDF using a fixed width font.
 
-[PDF Conditionally Rename Based on Content](plug-in/PDFConditionalRename) - Conditionally rename a PDF based on the content of the PDF and conditional searches.
+[PDF Conditionally Rename Based on Content](/plug-in/PDFConditionalRename) - Conditionally rename a PDF based on the content of the PDF and conditional searches.
 
 [PDF Make Searchable](/plug-in/PDFMakeSearchable) - Automatically print a newly created PDF to a printer that supports Direct PDF printing.
 
